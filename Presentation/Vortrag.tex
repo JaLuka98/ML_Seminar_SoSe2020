@@ -1,0 +1,69 @@
+\PassOptionsToPackage{unicode}{hyperref}
+\documentclass[aspectratio=1610, 9pt]{beamer}
+
+% Load packages you need here
+%\usepackage{polyglossia}
+%\setmainlanguage{german}
+
+\usepackage{csquotes}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\usepackage{braket}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+\hypersetup{
+  linkcolor= {tudark}, % internal links
+  citecolor={tugreen}, % citations
+  urlcolor={tudark} % external links/urls
+  }
+\usepackage{bookmark}
+
+\usepackage[english]{babel}
+\usepackage[
+backend=biber,
+style=authoryear-comp
+]{biblatex}
+
+\bibliography{lit.bib}
+
+\usepackage{siunitx}
+\usepackage{multicol}
+
+\usepackage{booktabs}
+
+\definecolor{light-gray}{HTML}{b0b5b0}
+
+% load the theme after all packages
+
+\usetheme[
+  showtotalframes, % show total number of frames in the footline
+]{tudo}
+
+% Put settings here, like
+\unimathsetup{
+  math-style=ISO,
+  bold-style=ISO,
+  nabla=upright,
+  partial=upright,
+  mathrm=sym,
+}
+
+\title{Titel}
+\author[T.~Magorsch,~J.~L.~Späh]{Tom Magorsch\\ Jan Lukas Späh}
+\institute[ML-Seminar]{\\[0.3cm]TU Dortmund \\ \Large ML-Seminar}
+
+\begin{document}
+
+
+
+\maketitle
+
+\begin{frame}
+  \parencite{test}
+\end{frame}
+
+\end{document}
