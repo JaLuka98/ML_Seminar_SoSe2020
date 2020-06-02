@@ -52,7 +52,7 @@ style=authoryear-comp
   mathrm=sym,
 }
 
-\title{Titel}
+\title{Classification und image-to-image transitioning anhand von Tiergesichtern}
 \author[T.~Magorsch,~J.~L.~Späh]{Tom Magorsch\\ Jan Lukas Späh}
 \institute[ML-Seminar]{\\[0.3cm]TU Dortmund \\ \Large ML-Seminar}
 
@@ -62,8 +62,71 @@ style=authoryear-comp
 
 \maketitle
 
-\begin{frame}
-  \parencite{test}
+
+
+
+\begin{frame}{Fragestellung}
+\begin{itemize}
+\item Verschiedene Fragestellungen:
+\begin{enumerate}
+\item Klassifikation: ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
+\item Image-to-image Problem: ``Generiere ein Bild von einem Hund, einer Katze oder einem anderen Wildtier.''
+\end{enumerate}
+\item Weitere möglichen Untersuchungsschwerpunkte:
+  \begin{itemize}
+  \item Clustering von Arten und Rassen
+  \item Data Augmentation von Trainings-Samples
+  \end{itemize}
+\end{itemize}
+
+
+
 \end{frame}
+
+
+
+
+
+\begin{frame}{Datensatz}
+  \begin{columns}
+
+    \column{0.8\textwidth}
+
+    \begin{itemize}
+    \item Quelle: Kaggle \cite{kaggle}, Datensatz von paper aus April 2020 (\cite{choi2020starganv2})
+    \item Lizenz: CreativeCommons (CC BY-NC 4.0)
+    \item Knapp $1600$ $512\times 512$ Bilder verschiedener Tiere
+    \item Bilder in drei Kategorien aufgeteilt: (jeweils ca 5000 Bilder)
+      \begin{enumerate}
+      \item Cat
+      \item Dog
+      \item Wildlife
+      \end{enumerate}
+    \item Targetvariable im ersten Schritt: Prediction für jede Klasse
+    \end{itemize}
+
+    \column{0.2\textwidth}
+    \includegraphics[scale=0.13]{images/cat.jpg}\\
+    \includegraphics[scale=0.13]{images/dog.jpg}\\
+    \includegraphics[scale=0.13]{images/wildlife.jpg}\\
+    
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Vergleich mit Alternativmethode}
+  \begin{itemize}
+  \item Einfache Algorithmen sind kaum in der Lage Bilder zu klassifizieren
+  \item Mögliche Vergleichsmethode für image-classification: Z. B. kNN clustering:
+    \begin{enumerate}
+    \item Extrahiere Features manuell aus den Bilder (z. B. Farbhistogram, Kontrast, Form-Features)
+    \item Definiere Metrik über dem Feature-Raum
+    \item Nutze Metrik für klassischen kNN
+    \end{enumerate}
+  \item Performance Measure für GAN: Kann ein DNN die generierten von den echten Bildern unterscheiden ?
+  \end{itemize}
+  
+\end{frame}
+
+
 
 \end{document}
