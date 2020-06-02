@@ -84,19 +84,16 @@ style=authoryear-comp
 \end{frame}
 
 
-
-
-
 \begin{frame}{Datensatz}
   \begin{columns}
 
     \column{0.8\textwidth}
 
     \begin{itemize}
-    \item Quelle: Kaggle \cite{kaggle}, Datensatz von paper aus April 2020 (\cite{choi2020starganv2})
+    \item Quelle: \href{https://www.kaggle.com/andrewmvd/animal-faces?}{Kaggle}, Datensatz aus April 2020 (\href{https://arxiv.org/abs/1912.01865}{arxiv:1912.01865}) mit \href{https://github.com/clovaai/stargan-v2}{Git-Repo}
     \item Lizenz: CreativeCommons (CC BY-NC 4.0)
-    \item Knapp $1600$ $512\times 512$ Bilder verschiedener Tiere
-    \item Bilder in drei Kategorien aufgeteilt: (jeweils ca 5000 Bilder)
+    \item Knapp $1600$ Bilder verschiedener Tiere: $512\times 512$ Pixel
+    \item Bilder in drei Kategorien aufgeteilt: (jeweils ca. 5000 Bilder)
       \begin{enumerate}
       \item Cat
       \item Dog
@@ -109,22 +106,22 @@ style=authoryear-comp
     \includegraphics[scale=0.13]{images/cat.jpg}\\
     \includegraphics[scale=0.13]{images/dog.jpg}\\
     \includegraphics[scale=0.13]{images/wildlife.jpg}\\
-    
+
   \end{columns}
 \end{frame}
 
 \begin{frame}{Vergleich mit Alternativmethode}
   \begin{itemize}
-  \item Einfache Algorithmen sind kaum in der Lage Bilder zu klassifizieren
-  \item Mögliche Vergleichsmethode für image-classification: Z. B. kNN clustering:
-    \begin{enumerate}
+  \item Einfache Algorithmen sind kaum in der Lage, Bilder mit vergleichbarer Genauigkeit wie Deep-Learning-Methoden zu klassifizieren
+  \item Mögliche Vergleichsmethode für image-classification: z.B. kNN:
+  \begin{enumerate}
     \item Extrahiere Features manuell aus den Bilder (z. B. Farbhistogram, Kontrast, Form-Features)
     \item Definiere Metrik über dem Feature-Raum
     \item Nutze Metrik für klassischen kNN
-    \end{enumerate}
+  \end{enumerate}
   \item Performance Measure für GAN: Kann ein DNN die generierten von den echten Bildern unterscheiden ?
   \end{itemize}
-  
+
 \end{frame}
 
 
