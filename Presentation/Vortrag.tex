@@ -52,7 +52,7 @@ style=authoryear-comp
   mathrm=sym,
 }
 
-\title{Classification und image-to-image transitioning anhand von Tiergesichtern}
+\title{Klassifikation von Tiergesichtern in drei Kategorien}
 \author[T.~Magorsch,~J.~L.~Späh]{Tom Magorsch\\ Jan Lukas Späh}
 \institute[ML-Seminar]{\\[0.3cm]TU Dortmund \\ \Large ML-Seminar}
 
@@ -67,15 +67,14 @@ style=authoryear-comp
 
 \begin{frame}{Fragestellung}
 \begin{itemize}
-\item Verschiedene Fragestellungen:
-\begin{enumerate}
-\item Klassifikation: ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
-\item Image-to-image Problem: ``Generiere ein Bild von einem Hund, einer Katze oder einem anderen Wildtier.''
-\end{enumerate}
-\item Weitere möglichen Untersuchungsschwerpunkte:
+  \item Grundlegende Fragestellung der Klassifikation:\\
+  \rightarrow{} ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
+  \vspace{0.5cm}
+  \item Weitere möglichen Untersuchungsschwerpunkte:
   \begin{itemize}
-  \item Clustering von Arten und Rassen
-  \item Data Augmentation von Trainings-Samples
+    \item Clustering von Arten und Rassen
+    \item Data Augmentation von Trainings-Samples
+    \item Generation von neuen Bildern auf Basis der vorliegenden Daten
   \end{itemize}
 \end{itemize}
 
@@ -92,7 +91,7 @@ style=authoryear-comp
     \begin{itemize}
     \item Quelle: \href{https://www.kaggle.com/andrewmvd/animal-faces?}{Kaggle}, Datensatz aus April 2020 (\href{https://arxiv.org/abs/1912.01865}{arxiv:1912.01865}) mit \href{https://github.com/clovaai/stargan-v2}{Git-Repo}
     \item Lizenz: CreativeCommons (CC BY-NC 4.0)
-    \item Knapp $1600$ Bilder verschiedener Tiere: $512\times 512$ Pixel
+    \item $16130$ Bilder verschiedener Tiere: $512\times 512$ Pixel
     \item Bilder in drei Kategorien aufgeteilt: (jeweils ca. 5000 Bilder)
       \begin{enumerate}
       \item Cat
@@ -110,16 +109,18 @@ style=authoryear-comp
   \end{columns}
 \end{frame}
 
-\begin{frame}{Vergleich mit Alternativmethode}
+\begin{frame}{Methode zur Klassifikation und Vergleich mit Alternativen}
   \begin{itemize}
-  \item Einfache Algorithmen sind kaum in der Lage, Bilder mit vergleichbarer Genauigkeit wie Deep-Learning-Methoden zu klassifizieren
-  \item Mögliche Vergleichsmethode für image-classification: z.B. kNN:
-  \begin{enumerate}
-    \item Extrahiere Features manuell aus den Bilder (z. B. Farbhistogram, Kontrast, Form-Features)
-    \item Definiere Metrik über dem Feature-Raum
-    \item Nutze Metrik für klassischen kNN
-  \end{enumerate}
-  \item Performance Measure für GAN: Kann ein DNN die generierten von den echten Bildern unterscheiden ?
+    \item Einfache Algorithmen sind kaum in der Lage, Bilder mit vergleichbarer Genauigkeit wie Deep-Learning-Methoden zu klassifizieren\\
+    \rightarrow{} Trainiere unterschiedliche neuronale Netze
+    \item Beispiel: Flaches NN, Tiefes NN und CNN
+    \item Mögliche einfache Vergleichsmethode für Bildklassifikation: z.B. kNN:
+    \begin{enumerate}
+      \item Extrahiere Features manuell aus den Bilder (z. B. Farbhistogram, Kontrast, Form-Features)
+      \item Definiere Metrik über dem Feature-Raum
+      \item Nutze Metrik für klassischen kNN
+    \end{enumerate}
+    \item Performance Measure für GAN: Kann ein DNN die generierten von den echten Bildern unterscheiden ?
   \end{itemize}
 
 \end{frame}
