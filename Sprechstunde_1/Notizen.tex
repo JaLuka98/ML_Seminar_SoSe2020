@@ -1,0 +1,127 @@
+\PassOptionsToPackage{unicode}{hyperref}
+\documentclass[aspectratio=1610, 9pt]{beamer}
+
+% Load packages you need here
+%\usepackage{polyglossia}
+%\setmainlanguage{german}
+
+\usepackage{csquotes}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\usepackage{braket}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+\hypersetup{
+  linkcolor= {tudark}, % internal links
+  citecolor={tugreen}, % citations
+  urlcolor={tudark} % external links/urls
+  }
+\usepackage{bookmark}
+
+\usepackage[english]{babel}
+\usepackage[
+backend=biber,
+style=authoryear-comp
+]{biblatex}
+
+\bibliography{lit.bib}
+
+\usepackage{siunitx}
+\usepackage{multicol}
+
+\usepackage{booktabs}
+
+\definecolor{light-gray}{HTML}{b0b5b0}
+
+% load the theme after all packages
+
+\usetheme[
+  showtotalframes, % show total number of frames in the footline
+]{tudo}
+
+% Put settings here, like
+\unimathsetup{
+  math-style=ISO,
+  bold-style=ISO,
+  nabla=upright,
+  partial=upright,
+  mathrm=sym,
+}
+
+\title{Sprechstunde zu:\\Klassifikation von Tiergesichtern in drei Kategorien}
+\author[T.~Magorsch,~J.~L.~Späh]{Tom Magorsch\\ Jan Lukas Späh}
+\institute[ML-Seminar]{\\[0.3cm]TU Dortmund \\ \Large ML-Seminar}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}{Erinnerung: Fragestellung und Datensatz}
+
+  \begin{columns}
+    \column{0.8\textwidth}
+    \begin{itemize}
+      \item Klassfikationsproblem: Hund, Katze, Wildtier\\
+      \item $16130$ farbige Bilder verschiedener Tiere: $512\times 512$ Pixel
+    \end{itemize}
+    \column{0.2\textwidth}
+    \includegraphics[scale=0.13]{images/cat.jpg}\\
+    \includegraphics[scale=0.13]{images/dog.jpg}\\
+    \includegraphics[scale=0.13]{images/wildlife.jpg}\\
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}{DNN vs CNN}
+
+  ...
+
+\end{frame}
+
+\begin{frame}{Alternativmethode}
+
+  \begin{itemize}
+    \item Wir brauchen eine einfache Alternativmethode als Benchmark/Motivation für anspruchsvollere Methoden (CNN,\ldots)
+    \item Erste Idee: kNN-Classifier mit reinen Pixelwerten
+    \begin{itemize}
+      \item Vorteil: Einfach und schafft Klassfikation mit ca. 50\% Accuracy
+      \item Nachteil: Speicherintensiv. Muss im Prinzip alle Trainingsdaten im RAM haben
+    \end{itemize}
+    \item Wie den Nachteil lösen oder umgehen?? Ideen:
+    \begin{itemize}
+      \item Bilder iterativ downscalen und damit arbeiten
+      \item Datensatz aufteilen in $n$ Häppchen, die in RAM passen, kNN fitten und evaluieren mit angemessen val\_split\\
+      \rightarrow{} Erhalte val\_acc auf komplettem Datensatz mit Unsicherheit
+    \end{itemize}
+    \item Zweite Idee: PCA $\to$ SVM, BDT oder Ähnliches
+    \item Es existieren Methoden, PCA inkrementell zu machen. Alternativ: PCA berechnen in Colab, abspeichern und laden
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Ideen zum Ausbau des Projekts}
+
+  \begin{itemize}
+    \item Zusammenfassend: Erste Alternativmethode funktioniert schlechter als bereits zufriedenstellendes CNN
+    \item Wie weiter? Ist das sinnvoll?
+    \begin{itemize}
+      \item Hyperparametersuche für kNN, Alternativmethoden und Netze
+      \item Bestes Netz aufschneiden und eine Lage clustern\\
+      \rightarrow{} Von Hand inspizieren. Sind Tierarten oder Muster erkennbar?
+      \item Einfall: Klassischen Hund/Katze Datensatz und Performance testen.
+      \item Auch möglich, um Modell zu interpretieren: Selbst einige wenige Bilder mit bekannten Arten heraussuchen und schauen, was passiert.
+    \end{itemize}
+    \item Einschätzung von Euch: Guter Plan? Ab wo ausreichend für Projekt?
+  \end{itemize}
+
+\end{frame}
+
+
+
+\end{document}
