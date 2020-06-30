@@ -77,10 +77,35 @@ style=authoryear-comp
 
 \end{frame}
 
+\begin{frame}{Training der Daten}
+  \begin{itemize}
+  \item \textbf{Problem:} Rohdaten passen nicht in den Arbeitsspeicher.
+  \item \textbf{Lösung:} Lade Daten während dem Training in Batches in den RAM
+    \begin{enumerate}
+    \item Lade Bilder mit imread während dem Training
+    \item Erstelle .h5 und lade Bilder daraus
+    \end{enumerate}
+  \item Training mit Data Generator jedoch langsamer
+  \item Test mit 1200 training und 300 validation samples - 50 Mio Parameter:
+    \begin{enumerate}
+    \item Training mit Bildern im RAM: 261s
+    \item Training mit imgrea: 338s
+    \item Training mit h5: 318s
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}{DNN vs CNN}
-
-  ...
-
+  \begin{itemize}
+  \item Zwei Netzwerke die prinzipiell funktionieren.
+  \item Nächster Schritt: Hyperparameter Optimierung
+  \end{itemize}
+  \includegraphics[scale=0.3]{images/cnn_acc.png}
+  \includegraphics[scale=0.3]{images/dnn_acc.png}
+  \begin{itemize}
+  \item Fragestellung: Lohnt sich die volle Auflösung zu nutzen?
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Alternativmethode}
