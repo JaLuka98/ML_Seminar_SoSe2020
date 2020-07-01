@@ -104,7 +104,7 @@ style=authoryear-comp
   \item Zwei Netzwerke die prinzipiell funktionieren.
   \item Nächster Schritt: Hyperparameter Optimierung
   \end{itemize}
-  
+
   \begin{figure}
     \centering
     \begin{subfigure}{0.4\textwidth}
@@ -115,7 +115,7 @@ style=authoryear-comp
     \begin{subfigure}{0.4\textwidth}
       \includegraphics[scale=0.35]{images/cnn_acc.png}
       \caption{Accuracy des CNN}
-      \label{fig:cnn}      
+      \label{fig:cnn}
     \end{subfigure}
   \end{figure}
 
@@ -124,20 +124,20 @@ style=authoryear-comp
 \begin{frame}{Alternativmethode}
 
   \begin{itemize}
-    \item Wir brauchen eine einfache Alternativmethode als Benchmark/Motivation für anspruchsvollere Methoden (CNN,\ldots)
-    \item Erste Idee: kNN-Classifier mit reinen Pixelwerten
+    \item Alternativmethode als Benchmark/Motivation für anspruchsvollere Methoden (hier: CNN)
+    \item \textbf{Idee:} kNN-Classifier mit reinen Pixelwerten
     \begin{itemize}
       \item Vorteil: Einfach und schafft Klassfikation mit ca. 50\% Accuracy
-      \item Nachteil: Speicherintensiv. Muss im Prinzip alle Trainingsdaten im RAM haben
+      \item \textbf{Problem:} Speicherintensiv. Muss im Prinzip alle Trainingsdaten im RAM haben
     \end{itemize}
-    \item Wie den Nachteil lösen oder umgehen?? Ideen:
+    \item \textbf{Frage:} Wie diesen Nachteil lösen oder umgehen?? Möglichkeiten:
     \begin{itemize}
       \item Bilder iterativ downscalen und damit arbeiten
       \item Datensatz aufteilen in $n$ Häppchen, die in RAM passen, kNN fitten und evaluieren mit angemessen val\_split\\
       \rightarrow{} Erhalte val\_acc auf komplettem Datensatz mit Unsicherheit
     \end{itemize}
-    \item Zweite Idee: PCA $\to$ SVM, BDT oder Ähnliches
-    \item Es existieren Methoden, PCA inkrementell zu machen. Alternativ: PCA berechnen in Colab, abspeichern und laden
+    %\item Zweite Idee: PCA $\to$ SVM, BDT oder Ähnliches
+    %\item Es existieren Methoden, PCA inkrementell zu machen. Alternativ: PCA berechnen in Colab, abspeichern und laden
   \end{itemize}
 
 \end{frame}
@@ -147,15 +147,15 @@ style=authoryear-comp
 
   \begin{itemize}
     \item Zusammenfassend: Erste Alternativmethode funktioniert schlechter als bereits zufriedenstellendes CNN
-    \item Wie weiter? Ist das sinnvoll?
+    \item \textbf{Frage:} Welche weiteren Schritte?
     \begin{itemize}
-      \item Hyperparametersuche für kNN, Alternativmethoden und Netze
-      \item Bestes Netz aufschneiden und eine Lage clustern\\
-      \rightarrow{} Von Hand inspizieren. Sind Tierarten oder Muster erkennbar?
-      \item Einfall: Klassischen Hund/Katze Datensatz und Performance testen.
-      \item Auch möglich, um Modell zu interpretieren: Selbst einige wenige Bilder mit bekannten Arten heraussuchen und schauen, was passiert.
+      \item Sequentielle Hyperparametersuche für kNN und Netze
+      \item Bestes Netz aufschneiden und Output einer Lage clustern\\
+      \rightarrow{} Von Hand inspizieren. Sind Tierarten oder Muster erkennbar (Wild)?
+      %s\item Einfall: Klassischen Hund/Katze Datensatz und Performance testen.
+      \item Auch möglich: Wähle selbst Bilder bestimmter Arten aus und interpretiere Output
     \end{itemize}
-    \item Einschätzung von Euch: Guter Plan? Ab wo ausreichend für Projekt?
+    \item \textbf{Frage:} Guter Plan? Ab wo ausreichend für das Projekt?
   \end{itemize}
 
 \end{frame}
