@@ -3,10 +3,13 @@
   captions=tableheading,  % Tabellenüberschriften
   titlepage=firstiscover, % Titelseite ist Deckblatt
   a4paper, % Da so explizit von Olaf und Johannes gefordert
+  12pt, % Auch explizit so gefordert
 ]{scrartcl}
 
-\usepackage[left=2cm,textwidth=8cm,marginpar=3cm]{geometry}
+\usepackage[left=2.5cm,right=2.5cm,top=3.5cm,bottom=3.5cm]{geometry}
 \usepackage{layout} % Um die Seitenränder als Bild auszugeben
+
+\usepackage[onehalfspacing]{setspace} % 1,5facher Zeilenabstand
 
 % Paket float verbessern
 \usepackage{scrhack}
@@ -111,6 +114,8 @@
 
 % Verbesserungen am Schriftbild
 \usepackage{microtype}
+
+\usepackage{blindtext}
 
 % Literaturverzeichnis
 \usepackage[
