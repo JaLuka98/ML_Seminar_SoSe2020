@@ -21,7 +21,7 @@
   urlcolor={tudark} % external links/urls
   }
 \usepackage{bookmark}
-
+\usepackage{subcaption}
 \usepackage[english]{babel}
 \usepackage[
 backend=biber,
@@ -86,13 +86,16 @@ style=authoryear-comp
     \item Erstelle .h5 und lade Bilder daraus
     \end{enumerate}
   \item Training mit Data Generator jedoch langsamer
-  \item Test mit 1200 training und 300 validation samples - 50 Mio Parameter:
+  \item Test mit 1200 training und 300 validation Bilder - 50 Mio Parameter:
     \begin{enumerate}
     \item Training mit Bildern im RAM: 261s
-    \item Training mit imgrea: 338s
+    \item Training mit imgread: 338s
     \item Training mit h5: 318s
     \end{enumerate}
   \end{itemize}
+  \centering
+  \LARGE
+  \textbf{Frage:} Ist Methode 1. eine geeignete Methode oder gibt es bessere Alternativen?
 \end{frame}
 
 
@@ -101,11 +104,21 @@ style=authoryear-comp
   \item Zwei Netzwerke die prinzipiell funktionieren.
   \item Nächster Schritt: Hyperparameter Optimierung
   \end{itemize}
-  \includegraphics[scale=0.3]{images/cnn_acc.png}
-  \includegraphics[scale=0.3]{images/dnn_acc.png}
-  \begin{itemize}
-  \item Fragestellung: Lohnt sich die volle Auflösung zu nutzen?
-  \end{itemize}
+  
+  \begin{figure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+      \includegraphics[scale=0.35]{images/dnn_acc.png}
+      \caption{Accuracy des DNN}
+      \label{fig:dnn}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+      \includegraphics[scale=0.35]{images/cnn_acc.png}
+      \caption{Accuracy des CNN}
+      \label{fig:cnn}      
+    \end{subfigure}
+  \end{figure}
+
 \end{frame}
 
 \begin{frame}{Alternativmethode}
