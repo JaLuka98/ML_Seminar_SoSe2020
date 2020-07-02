@@ -14,7 +14,7 @@ rng = np.random.RandomState(0)
 patch_size = (50, 50)
 max_patches = 25
 
-img = imread('./afhq/train/dog/flickr_dog_000020.jpg', as_gray=True)
+img = imread('../afhq/train/dog/flickr_dog_000020.jpg', as_gray=True)
 
 data = extract_patches_2d(img, patch_size, max_patches, random_state=rng)
 
