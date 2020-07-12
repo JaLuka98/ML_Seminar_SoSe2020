@@ -32,11 +32,11 @@ class Testsequence:
     def add_model(self, numconvlayer, numfilters, numdense, numnodes, pooling):
 
         model = Sequential()
-        model.add(Conv2D(numfilters, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same', input_shape=(512, 512, 3)))
+        model.add(Conv2D(numfilters[0], (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same', input_shape=(512, 512, 3)))
         model.add(MaxPooling2D((pooling, pooling)))
 
         for i in range(1,numconvlayer):
-            model.add(Conv2D(64, (3, 3), activation='relu'))
+            model.add(Conv2D(numfilters[i], (3, 3), activation='relu'))
             model.add(MaxPooling2D((pooling, pooling)))
         
         model.add(Flatten())
@@ -74,7 +74,7 @@ class Testsequence:
         for model in self.models:
             model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    def trainall(self, traingenerator, valgenerator):
+    def trainall(self, traingenerator, valgenerator, safemodel):
         i = 0
         for model in self.models:
             self.text_file.write("Model " + str(i) + "\n")
@@ -89,6 +89,10 @@ class Testsequence:
                                           validation_data=valgenerator, validation_steps=128, epochs=self.epochs, verbose=1, 
                                           callbacks=[tensorboard_callback])
             end = time.time()
+
+            if(i == safemodel):
+                model.save("my_model")
+                
 
             self.text_file.write('time for training: ' + str(end-start) + '\n')
 
