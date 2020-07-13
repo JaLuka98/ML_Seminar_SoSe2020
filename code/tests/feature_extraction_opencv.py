@@ -2,7 +2,7 @@
 # See https://www.pyimagesearch.com/2016/08/08/k-nn-classifier-for-image-classification/
 # Needs to be executed in a py36 environment: https://stackoverflow.com/questions/57186629/install-opencv-with-conda (because of opencv issues)
 
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import random
 
@@ -11,6 +11,8 @@ from sklearn.model_selection import train_test_split
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, classification_report
+
+from sklearn.decomposition import PCA
 
 import imutils
 from imutils import paths
@@ -65,7 +67,8 @@ y = []
 random.shuffle(imagePaths) # inplace shuffling to get examples of all classes
 
 # loop over the input images
-for (i, imagePath) in enumerate(imagePaths[0:5000]):
+for (i, imagePath) in enumerate(imagePaths):
+	if i%100==0: print("INFO: Processing image", i, "...")
 	# load the image and extract the class label
 	image = cv2.imread(imagePath)
 	label = get_label_from_path(path=imagePath)
@@ -83,6 +86,26 @@ print("[INFO] features matrix: {:.2f}MB".format(
 	X.nbytes / (1024 * 1000.0)))
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.3, random_state=42)
+
+pca = PCA(n_components=0.95, svd_solver = 'full')
+pca.fit(X_train)
+X_train = pca.transform(X_train)
+X_val = pca.transform(X_val)
+print(X_train.shape)
+#
+#print(X_train[0])
+#
+#colors = ['navy', 'turquoise', 'red']
+#lw = 2
+#
+## funzt noch nicht
+#for color, i, target_name in zip(colors, [0, 1, 2], ['cat','dog','wild']):
+#    plt.scatter(X_train[y_train == i, 0], X_train[y_train == i, 1], c=color, alpha=.8, lw=lw,
+#                label=target_name)
+#plt.legend(loc='best', shadow=False, scatterpoints=1)
+#plt.title('PCA of afhq color histograms dataset')
+#plt.show()
+
 
 neigh = KNeighborsClassifier(n_neighbors=2)
 neigh.fit(X_train, y_train)
