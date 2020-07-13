@@ -20,6 +20,9 @@ import cv2
 import os
 import sys
 
+from mlxtend.plotting import plot_decision_regions
+import seaborn as sns
+
 
 def get_label_from_path(path):
 	# Get rid of dir and extension, only filename remains
@@ -31,7 +34,7 @@ def get_label_from_path(path):
 	elif "wild" in filename:
 		label = 2
 	else:
-		print("Critical error. Image is neither cat, nor dog nor wild. Exiting...")
+		print("INFO: Critical error. Image is neither cat, nor dog nor wild. Exiting...")
 		sys.exit()
 
 	return label
@@ -81,6 +84,7 @@ for (i, imagePath) in enumerate(imagePaths):
 	X.append(hist)
 
 X = np.asarray(X)
+y = np.asarray(y)
 
 print("[INFO] features matrix: {:.2f}MB".format(
 	X.nbytes / (1024 * 1000.0)))
@@ -91,6 +95,7 @@ pca = PCA(n_components=0.95, svd_solver = 'full')
 pca.fit(X_train)
 X_train = pca.transform(X_train)
 X_val = pca.transform(X_val)
+X = pca.transform(X) # for boundary regions
 print(X_train.shape)
 #
 #print(X_train[0])
@@ -115,6 +120,20 @@ print('Accuracy: %.2f' % accuracy_score(y_val, y_pred))
 print("Precision: %.2f" % precision_score(y_val, y_pred, average='weighted'))
 print("Recall: %.2f" % recall_score(y_val, y_pred, average='weighted'))
 print('Classification Report:\n', classification_report(y_val, y_pred))
+
+sns.distplot(X[:,0][y==0], hist=False, label='cat')
+sns.distplot(X[:,0][y==1], hist=False, label='dog')
+sns.distplot(X[:,0][y==2], hist=False, label='wild')
+plt.savefig('kde_sns_test.pdf')
+plt.clf()
+
+sns.distplot(X[:,1][y==0], hist=False, label='cat')
+sns.distplot(X[:,1][y==1], hist=False, label='dog')
+sns.distplot(X[:,1][y==2], hist=False, label='wild')
+plt.savefig('kde_sns_test2.pdf')
+
+#plot_decision_regions(X=X[0:200,:], y=y[0:200], clf=neigh, legend=2)
+#plt.show()
 
 #img = cv2.imread('../afhq/train/cat/flickr_cat_000015.jpg')
 #print(img.shape)

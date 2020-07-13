@@ -1,0 +1,132 @@
+\PassOptionsToPackage{unicode}{hyperref}
+\documentclass[aspectratio=1610, 9pt]{beamer}
+
+% Load packages you need here
+%\usepackage{polyglossia}
+%\setmainlanguage{german}
+
+\usepackage{csquotes}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\usepackage{braket}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+\hypersetup{
+  linkcolor= {tudark}, % internal links
+  citecolor={tugreen}, % citations
+  urlcolor={tudark} % external links/urls
+  }
+\usepackage{bookmark}
+
+\usepackage[english]{babel}
+\usepackage[
+backend=biber,
+style=authoryear-comp
+]{biblatex}
+
+\bibliography{lit.bib}
+
+\usepackage{siunitx}
+\usepackage{multicol}
+
+\usepackage{booktabs}
+
+\definecolor{light-gray}{HTML}{b0b5b0}
+
+% load the theme after all packages
+
+\usetheme[
+  showtotalframes, % show total number of frames in the footline
+]{tudo}
+
+% Put settings here, like
+\unimathsetup{
+  math-style=ISO,
+  bold-style=ISO,
+  nabla=upright,
+  partial=upright,
+  mathrm=sym,
+}
+
+\title{Klassifikation von Tiergesichtern in drei Kategorien}
+\author[T.~Magorsch,~J.~L.~Späh]{Tom Magorsch\\ Jan Lukas Späh}
+\institute[ML-Seminar]{\\[0.3cm]TU Dortmund \\ \Large ML-Seminar}
+
+\begin{document}
+
+
+
+\maketitle
+
+
+
+
+\begin{frame}{Datensatz und Fragestellung}
+\begin{itemize}
+  \item Grundlegende Fragestellung der Klassifikation:\\
+  \rightarrow{} ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
+  \vspace{0.5cm}
+\end{itemize}
+
+
+
+\end{frame}
+
+
+\begin{frame}{Datensatz}
+  \begin{columns}
+
+    \column{0.8\textwidth}
+
+    \begin{itemize}
+    \item Quelle: \href{https://www.kaggle.com/andrewmvd/animal-faces?}{Kaggle}, Datensatz aus Dezember 2019 (\href{https://arxiv.org/abs/1912.01865}{arxiv:1912.01865}) mit \href{https://github.com/clovaai/stargan-v2}{Git-Repo}
+    \item Lizenz: CreativeCommons (CC BY-NC 4.0)
+    \item $16136$ Bilder verschiedener Tiere: $512\times 512$ Pixel
+    \item Bilder in drei Kategorien aufgeteilt: (jeweils ca. 5000 Bilder)
+      \begin{enumerate}
+      \item Cat
+      \item Dog
+      \item Wildlife
+      \end{enumerate}
+    \item Datensatz bereits aufgeteilt in train (14633) und test (1503)
+    \item Grundlegende Fragestellung der Klassifikation:\\
+    \rightarrow{} ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
+    \end{itemize}
+
+    \column{0.2\textwidth}
+    \includegraphics[scale=0.13]{images/cat.jpg}\\
+    \includegraphics[scale=0.13]{images/dog.jpg}\\
+    \includegraphics[scale=0.13]{images/wildlife.jpg}\\
+
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Alternativmethode}
+
+  
+
+\end{frame}
+
+%\begin{frame}{Methode zur Klassifikation und Vergleich mit Alternativen}
+%  \begin{itemize}
+%    \item Einfache Algorithmen sind kaum in der Lage, Bilder mit vergleichbarer Genauigkeit wie Deep-Learning-Methoden zu klassifizieren\\
+%    \rightarrow{} Trainiere unterschiedliche neuronale Netze
+%    \item Beispiel: Flaches NN, Tiefes NN und CNN
+%    \item Mögliche einfache Vergleichsmethode für Bildklassifikation: z.B. kNN:
+%    \begin{enumerate}
+%      \item Extrahiere Features manuell aus den Bilder (z. B. Farbhistogram, Kontrast, Form-Features)
+%      \item Definiere Metrik über dem Feature-Raum
+%      \item Nutze Metrik für klassischen kNN
+%    \end{enumerate}
+%    \item Performance Measure für GAN: Kann ein DNN die generierten von den echten Bildern unterscheiden ?
+%  \end{itemize}
+%
+%\end{frame}
+
+
+
+\end{document}
