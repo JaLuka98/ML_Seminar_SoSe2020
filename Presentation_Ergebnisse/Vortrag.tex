@@ -123,7 +123,7 @@ style=authoryear-comp
     \item Manuelles variieren der Netzwerkstruktur
       \begin{enumerate}
       \item Anzahl Convolutional Layer (1-6)
-      \item Filter Size (16-128)
+      \item Number Filters (16-128)
       \item Anzahl Dense Layer (1-4)
       \item Dense Units (16-128)
       \item Pooling size (2-5)
@@ -193,7 +193,7 @@ style=authoryear-comp
       Dense & (64) & 19.267.648\\
       Dense & (3) & 195\\
       \midrule
-      Parameter & & 2.570.979\\
+      Parameter & & 19.282.211\\
       \toprule
 \end{tabular}
 }
@@ -213,8 +213,31 @@ style=authoryear-comp
 
 
 
-\begin{frame}
+\begin{frame}{Einfaches DNN}
 
+  \centering
+  \hspace{-1.3cm}\scalebox{1.6}{
+  \begin{tabular}{lcccc}
+    Pooling: & -  & 2x2  &  3x3  &  4x4\\
+    Parameter: & 55.061.573  &  13.773.893  & 6.080.333  &  3.451.973\\
+  \end{tabular}
+  }
+
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.3]{images/dnn.png}
+  \end{figure}
+  
+\end{frame}
+
+
+\begin{frame}{Zusammenfassung}
+  \begin{itemize}
+  \item Alternativmethode KNN funktioniert besser als raten, jedoch keine hinreichend gute Klassifikation
+  \item Einfaches DNN zu Viele Parameter, mit skalierten Daten bis zu 70\% Accuracy
+  \item Convolutional Network funktioniert gut, mehrere Layer mit Pooling um Parameter zu reduzieren
+  \item \textbf{Ausblick:} Regularisierung
+  \end{itemize}
 \end{frame}
 
 
