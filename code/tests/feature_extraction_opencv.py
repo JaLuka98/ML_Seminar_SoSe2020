@@ -47,7 +47,7 @@ def extract_color_histogram(image, bins=(8, 8, 8)):
 	# 1: Source array, 2: channels to be used (all, since only single image at a time)
 	# 3: Dont use a mask, how should the binning be
 	hist = cv2.calcHist([hsv], [0, 1, 2], None, bins,
-		[0, 180, 0, 256, 0, 256])
+		[0, 256, 0, 256, 0, 256])
 	# Will become (8,8,8) hist
 	# handle normalizing the histogram if we are using OpenCV 2.4.X
 	if imutils.is_cv2():
@@ -60,34 +60,42 @@ def extract_color_histogram(image, bins=(8, 8, 8)):
 	return hist.flatten()
 
 
+def gs_color_hists(path_get="../afhq/train", path_store="./"):
+	# Get and store color hist
+	imagePaths = list(paths.list_images(path_get))
 
-#print("[INFO] describing images...")
-imagePaths = list(paths.list_images("../afhq/train"))
+	X = []
+	y = []
 
-X = []
-y = []
+	# loop over the input images
+	for (i, imagePath) in enumerate(imagePaths):
+		if i%100==0: print("INFO: Processing image", i, "...")
+		# load the image and extract the class label
+		image = cv2.imread(imagePath)
+		label = get_label_from_path(path=imagePath)
+		y.append(label)
+		# extract raw pixel intensity "features", followed by a color
+		# histogram to characterize the color distribution of the pixels
+		# in the image
+		#pixels = image_to_feature_vector(image)
+		hist = extract_color_histogram(image)
+		X.append(hist)
 
-random.shuffle(imagePaths) # inplace shuffling to get examples of all classes
+	X = np.asarray(X)
+	y = np.asarray(y)
 
-# loop over the input images
-for (i, imagePath) in enumerate(imagePaths):
-	if i%100==0: print("INFO: Processing image", i, "...")
-	# load the image and extract the class label
-	image = cv2.imread(imagePath)
-	label = get_label_from_path(path=imagePath)
-	y.append(label)
-	# extract raw pixel intensity "features", followed by a color
-	# histogram to characterize the color distribution of the pixels
-	# in the image
-	#pixels = image_to_feature_vector(image)
-	hist = extract_color_histogram(image)
-	X.append(hist)
+	print("[INFO] features matrix: {:.2f}MB".format(
+		X.nbytes / (1024 * 1000.0)))
 
-X = np.asarray(X)
-y = np.asarray(y)
+	np.save(file=path_store+'color_hists.npy', arr=X)
+	np.save(file=path_store+'labels.npy', arr=y)
 
-print("[INFO] features matrix: {:.2f}MB".format(
-	X.nbytes / (1024 * 1000.0)))
+
+
+#gs_color_hists(path_get="../afhq/train", path_store="./")
+
+X = np.load(file="./color_hists.npy")
+y = np.load(file="./labels.npy")
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.3, random_state=42)
 
@@ -112,7 +120,7 @@ print(X_train.shape)
 #plt.show()
 
 
-neigh = KNeighborsClassifier(n_neighbors=2)
+neigh = KNeighborsClassifier(n_neighbors=25)
 neigh.fit(X_train, y_train)
 y_pred = neigh.predict(X_val)
 
@@ -124,13 +132,17 @@ print('Classification Report:\n', classification_report(y_val, y_pred))
 sns.distplot(X[:,0][y==0], hist=False, label='cat')
 sns.distplot(X[:,0][y==1], hist=False, label='dog')
 sns.distplot(X[:,0][y==2], hist=False, label='wild')
-plt.savefig('kde_sns_test.pdf')
+plt.xlabel('First principal component')
+plt.ylabel('KDE')
+plt.savefig('kde_sns.pdf')
 plt.clf()
 
 sns.distplot(X[:,1][y==0], hist=False, label='cat')
 sns.distplot(X[:,1][y==1], hist=False, label='dog')
 sns.distplot(X[:,1][y==2], hist=False, label='wild')
-plt.savefig('kde_sns_test2.pdf')
+plt.xlabel('Second principal component')
+plt.ylabel('KDE')
+plt.savefig('kde_sns_2.pdf')
 
 #plot_decision_regions(X=X[0:200,:], y=y[0:200], clf=neigh, legend=2)
 #plt.show()

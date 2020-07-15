@@ -7,6 +7,8 @@
 
 \usepackage{csquotes}
 
+\usepackage{subfigure}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
@@ -62,22 +64,7 @@ style=authoryear-comp
 
 \maketitle
 
-
-
-
 \begin{frame}{Datensatz und Fragestellung}
-\begin{itemize}
-  \item Grundlegende Fragestellung der Klassifikation:\\
-  \rightarrow{} ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
-  \vspace{0.5cm}
-\end{itemize}
-
-
-
-\end{frame}
-
-
-\begin{frame}{Datensatz}
   \begin{columns}
 
     \column{0.8\textwidth}
@@ -85,7 +72,7 @@ style=authoryear-comp
     \begin{itemize}
     \item Quelle: \href{https://www.kaggle.com/andrewmvd/animal-faces?}{Kaggle}, Datensatz aus Dezember 2019 (\href{https://arxiv.org/abs/1912.01865}{arxiv:1912.01865}) mit \href{https://github.com/clovaai/stargan-v2}{Git-Repo}
     \item Lizenz: CreativeCommons (CC BY-NC 4.0)
-    \item $16136$ Bilder verschiedener Tiere: $512\times 512$ Pixel
+    \item $16136$ Farbbilder verschiedener Tiere: $512\times 512$ Pixel
     \item Bilder in drei Kategorien aufgeteilt: (jeweils ca. 5000 Bilder)
       \begin{enumerate}
       \item Cat
@@ -93,7 +80,7 @@ style=authoryear-comp
       \item Wildlife
       \end{enumerate}
     \item Datensatz bereits aufgeteilt in train (14633) und test (1503)
-    \item Grundlegende Fragestellung der Klassifikation:\\
+    \item Fragestellung der Klassifikation:\\
     \rightarrow{} ``Befindet sich auf dem Bild ein Hund, eine Katze oder etwas anderes?''
     \end{itemize}
 
@@ -107,9 +94,29 @@ style=authoryear-comp
 
 \begin{frame}{Alternativmethode}
 
-  
+  \begin{itemize}
+    \item Methoden ohne Deep-Learning können meist schlecht mit reinen Pixeldaten umgehen\\
+    \rightarrow{} Hochaufgelöster Datensatz: Bilder passen nicht ansatzweise in den RAM
+    \begin{enumerate}
+      \item 3D Colour Histograms: $512\times512\times3=786\,432 \to 8\times8\times8=512$ features
+      \item PCA, die $95\%$ der Varianz erhält $\to 112$ features
+      \item kNN-Klassifikation: Acc., Prec. und Rec. von $51$ bis $55$ Prozent
+    \end{enumerate}
+  \end{itemize}
+
+  \begin{figure}
+	   \centering
+	   \subfigure{\label{fig:a}\includegraphics[width=60mm]{figures/kde_sns.pdf}}
+	   \hspace{1cm}
+	   \subfigure{\label{fig:b}\includegraphics[width=60mm]{figures/kde_sns_2.pdf}}
+  \end{figure}
 
 \end{frame}
+
+\begin{frame}{Optimierung zweier CNN}
+  ???
+\end{frame}
+
 
 %\begin{frame}{Methode zur Klassifikation und Vergleich mit Alternativen}
 %  \begin{itemize}
