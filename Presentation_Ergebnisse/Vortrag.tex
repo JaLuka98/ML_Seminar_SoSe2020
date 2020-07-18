@@ -16,6 +16,8 @@
 \usepackage{braket}
 \usepackage{graphicx}
 
+\usepackage{booktabs}
+
 \usepackage{hyperref}
 \hypersetup{
   linkcolor= {tudark}, % internal links
@@ -114,7 +116,128 @@ style=authoryear-comp
 \end{frame}
 
 \begin{frame}{Optimierung zweier CNN}
-  ???
+
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+    \item Manuelles variieren der Netzwerkstruktur
+      \begin{enumerate}
+      \item Anzahl Convolutional Layer (1-6)
+      \item Number Filters (16-128)
+      \item Anzahl Dense Layer (1-4)
+      \item Dense Units (16-128)
+      \item Pooling size (2-5)
+      \end{enumerate}
+    \item Performance Unterschiede i.A. klein
+    \item 2 Modelle ausgewählt die besonders gut waren
+%      \begin{enumerate}
+%      \item 5 Convolutional Layer, aufsteigende Filtersizes, ein Dense Layer - 128 Nodes
+%      \item 2 Convolutional Layer, aufsteigende Filtersize, ein Dense Layer - 64 Nodes
+%      \end{enumerate}
+    \end{itemize}
+
+    
+    \column{0.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.35]{images/models.png}      
+      \caption{Links: 5 Convolutional Layer; Rechts: 2 Convolutional Layer; Die blaue und grüne Kurve zeigen die validation-accuracy, die orangene und magenta-farbene die trainings-accuracy.}
+      \label{fig:acc}
+    \end{figure}
+
+  \end{columns}
+\end{frame}
+
+
+
+\begin{frame}
+\begin{columns}
+
+\column{0.3\textwidth}
+
+\scalebox{0.73}{
+\begin{tabular}{lll}
+      \toprule
+      Layer & Output Shape & Parameter\\
+      \midrule
+      Convolutional & (512, 512, 16) & 448 \\
+      Max-Pooling & (256, 256, 16) & 0\\
+      Convolutional & (254, 254, 32) & 4.640\\
+      Max-Pooling & (127, 127, 32) & 0\\
+      Convolutional & (125, 125, 64) & 18.496\\
+      Max-Pooling & (62, 62, 64) & 0\\
+      Convolutional & (60, 60, 96) & 55.392\\
+      Max-Pooling & (30, 30, 96) & 0\\
+      Convolutional & (28, 28, 96) & 83.040\\
+      Max-Pooling & (14, 14, 96) & 0\\
+      Flatten & (18.816) & 0\\
+      Dense & (128) & 2.408.576\\
+      Dense & (3) & 387\\
+      \midrule
+      Parameter & & 2.570.979\\
+      \toprule
+\end{tabular}
+}
+
+
+\scalebox{0.73}{
+\begin{tabular}{lll}
+      \toprule
+      Layer & Output Shape & Parameter\\
+      \midrule
+      Convolutional & (512, 512, 16) & 448 \\
+      Max-Pooling & (170, 170, 16) & 0\\
+      Convolutional & (168, 168, 16) & 13.920\\
+      Max-Pooling & (56, 56, 96) & 0\\
+      Flatten & (301.056) & 0\\
+      Dense & (64) & 19.267.648\\
+      Dense & (3) & 195\\
+      \midrule
+      Parameter & & 19.282.211\\
+      \toprule
+\end{tabular}
+}
+
+\column{0.5\textwidth}
+
+\begin{figure}
+      \centering
+      \includegraphics[scale=0.4]{images/models.png}     
+      \caption{Links: 5 Convolutional Layer; Rechts: 2 Convolutional Layer; Die blaue und grüne Kurve zeigen die validation-accuracy, die orangene und magenta-farbene die trainings-accuracy.}
+      \label{fig:acc}
+    \end{figure}
+
+\end{columns}
+
+\end{frame}
+
+
+
+\begin{frame}{Einfaches DNN}
+
+  \centering
+  \hspace{-1.3cm}\scalebox{1.6}{
+  \begin{tabular}{lcccc}
+    Pooling: & -  & 2x2  &  3x3  &  4x4\\
+    Parameter: & 55.061.573  &  13.773.893  & 6.080.333  &  3.451.973\\
+  \end{tabular}
+  }
+
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.3]{images/dnn.png}
+  \end{figure}
+  
+\end{frame}
+
+
+\begin{frame}{Zusammenfassung}
+  \begin{itemize}
+  \item Alternativmethode KNN funktioniert besser als raten, jedoch keine hinreichend gute Klassifikation
+  \item Einfaches DNN zu Viele Parameter, mit skalierten Daten bis zu 70\% Accuracy
+  \item Convolutional Network funktioniert gut, mehrere Layer mit Pooling um Parameter zu reduzieren
+  \item \textbf{Ausblick:} Regularisierung
+  \end{itemize}
 \end{frame}
 
 
