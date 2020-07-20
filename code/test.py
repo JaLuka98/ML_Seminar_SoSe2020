@@ -32,31 +32,12 @@ my_validation_batch_generator = Generator(X_val_filenames, y_val, batch_size)
 
 seq = Testsequence("Test1",1)
 
-##Alles konstant Anzahl conv layer hoch
-#seq.add_model(1,64,2,32,5)
-#seq.add_model(2,64,2,32,3)
-#seq.add_model(3,64,2,32,2)
-#seq.add_model(4,64,2,32,2)
-#
-##Alles konstant Anzahl filter variieren
-#seq.add_model(2,16,2,32,3)
-#seq.add_model(2,32,2,32,3)
-#seq.add_model(2,64,2,32,3)
-#seq.add_model(2,96,2,32,3)
-#
-## dense layer variieren
-#seq.add_model(2,64,1,32,3)
-#seq.add_model(2,64,2,32,3)
-#seq.add_model(2,64,3,32,3)
-#
-## Anzahl dense units
-#seq.add_model(2,64,2,16,3)
-#seq.add_model(2,64,2,32,3)
-#seq.add_model(2,64,2,64,3)
 
-seq.add_model
+seq.add_model(2,[16,32,64,96,96],1,[128],2)
+
 
 seq.compileall()
+seq.summary(0)
 
-seq.trainall(my_training_batch_generator,my_validation_batch_generator, 0)
+#seq.trainall(my_training_batch_generator,my_validation_batch_generator, 0)
 
