@@ -13,7 +13,7 @@ train_dir = "afhq/train"
 
 X_train_filenames, X_val_filenames, y_train, y_val = load_data(train_dir, image_num, val_split)
 
-X_test, Xempyt, y_test, yempty = load_data("afhq/val",1555,0)
+X_test, y_test= load_data("afhq/val",1555,0.0)
 
 
 print(y_train.shape)
