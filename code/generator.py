@@ -1,8 +1,9 @@
 import keras
 import numpy as np
 from skimage.io import imread
+from tensorflow.keras.utils import Sequence
 
-class Generator(keras.utils.Sequence) :
+class Generator(Sequence) :
   
   def __init__(self, image_filenames, labels, batch_size) :
     self.image_filenames = image_filenames
