@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 from loader import load_data
 from generator import Generator
+import numpy as np
 
 
 def makepredictions(modelpath,outputfile):
@@ -10,7 +11,7 @@ def makepredictions(modelpath,outputfile):
     image_num = 1500
     val_split = 0
     
-    X_test_filenames, Xempty, y_test, yempty = load_data(train_dir, image_num, val_split)
+    X_test_filenames, y_test = load_data(train_dir, image_num, val_split)
     
     batch_size = 11
     
@@ -24,4 +25,5 @@ def makepredictions(modelpath,outputfile):
     
     np.savetxt(outputfile,np.vstack((np.arange(1500),np.argmax(y_test,axis=1),np.array(prediction[:,0]),np.array(prediction[:,1]),np.array(prediction[:,2]))).T)
 
-makepredictions("model0","predictions.txt")
+makepredictions("logs_and_models/7layer/model0","7layer_predictions.txt")
+makepredictions("logs_and_models/finalrun/model1","2layer_predictions.txt")

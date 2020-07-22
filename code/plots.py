@@ -5,54 +5,6 @@ import tensorboard_to_csv
 from loader import load_data
 
 import matplotlib.pyplot as plt
-
-
-
-# Test for getting csv from tensorboard
-
-def tabulate_events(dpath):
-    summary_iterators = [EventAccumulator(os.path.join(dpath, dname)).Reload() for dname in os.listdir(dpath)]
-
-    tags = summary_iterators[0].Tags()['scalars']
-
-    for it in summary_iterators:
-        assert it.Tags()['scalars'] == tags
-
-    out = defaultdict(list)
-    steps = []
-
-    for tag in tags:
-        steps = [e.step for e in summary_iterators[0].Scalars(tag)]
-
-        for events in zip(*[acc.Scalars(tag) for acc in summary_iterators]):
-            assert len(set(e.step for e in events)) == 1
-
-            out[tag].append([e.value for e in events])
-
-    return out, steps
-
-
-def to_csv(dpath):
-    dirs = os.listdir(dpath)
-
-    d, steps = tabulate_events(dpath)
-    tags, values = zip(*d.items())
-    np_values = np.array(values)
-
-    for index, tag in enumerate(tags):
-        df = pd.DataFrame(np_values[index], index=steps, columns=dirs)
-        df.to_csv(get_file_path(dpath, tag))
-
-
-def get_file_path(dpath, tag):
-    file_name = tag.replace("/", "_") + '.csv'
-    folder_path = os.path.join(dpath, 'csv')
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    return os.path.join(folder_path, file_name)
-
-
-
 #########################################
 ######### 1) Input Data Plots ###########
 #########################################
@@ -104,7 +56,7 @@ plt.savefig('plots/barplot_input.pdf')
 plt.clf()
 
 #########################################
-######### 2) Loss und Metric vs Epoch ###
+###### 2) Loss und Metric vs Epoch ######
 #########################################
 
 # Get the raw tensorboard logs from these paths
@@ -134,21 +86,34 @@ epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths
 #epoch_two = epoch_two[1:], epoch_five = epoch_five[1:], epoch_seven = epoch_seven[1:]
 
 
+#########################################
+########### 3) Network output ###########
+#########################################
 
-plt.subplots_adjust(wspace=0.5,hspace=1)
+i, label, cat, dog, wildlife = np.genfromtxt('7layer_predictions.txt',unpack=True)
+
+
+plt.subplots_adjust(wspace=0.5,hspace=0.5)
+
+### Reihenfolg wild=0 - dog=1 - cat=2
 
 plt.subplot(131)
-#plt.title('Trainings Datensatz')
-plt.plot(epoch_two, acc_train_two, label='')
+plt.hist(cat[label==2],label="Cat prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(cat[label==1],label="Dog prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(cat[label==0],label="Wildlife prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
 
 plt.subplot(132)
-plt.title('Validierungs Datensatz')
-plt.bar(labels,y_val,color=['red','green','blue'])
+plt.hist(dog[label==2],label="Cat prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(dog[label==1],label="Dog prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(dog[label==0],label="Wildlife prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
 
 plt.subplot(133)
-plt.title('Test Datensatz')
-plt.bar(labels,y_test,color=['red','green','blue'])
-plt.clf()
-# Damit du ungestört weiter machen kannst, Tom ;) - Jan Lukas
-#plt.show()
->>>>>>> 214bb806abbc650323cec9b37a36adc33f091416
+plt.hist(wildlife[label==2],label="Cat prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(wildlife[label==1],label="Dog prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(wildlife[label==0],label="Wildlife prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+
+
+plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
+plt.legend(bbox_to_anchor=(-0.1,1))
+plt.show()
+
