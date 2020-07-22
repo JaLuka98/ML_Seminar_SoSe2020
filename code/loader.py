@@ -43,6 +43,8 @@ def load_data(train_dir, image_num, val_split):
 
     filenames_shuffled_numpy = np.array(filenames_shuffled)
 
-    X_train_filenames, X_val_filenames, y_train, y_val = train_test_split(filenames_shuffled_numpy, y_labels_one_hot_shuffled, test_size=val_split, random_state=1)
-
-    return X_train_filenames, X_val_filenames, y_train, y_val
+    if val_split != 0.0:
+        X_train_filenames, X_val_filenames, y_train, y_val = train_test_split(filenames_shuffled_numpy, y_labels_one_hot_shuffled, test_size=val_split, random_state=1)
+        return X_train_filenames, X_val_filenames, y_train, y_val
+    elif val_split==0.0:
+        return filenames_shuffled_numpy, y_labels_one_hot_shuffled
