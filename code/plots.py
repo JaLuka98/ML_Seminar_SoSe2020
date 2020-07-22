@@ -5,6 +5,8 @@ import tensorboard_to_csv
 from loader import load_data
 
 import matplotlib.pyplot as plt
+
+from sklearn.metrics import confusion_matrix
 #########################################
 ######### 1) Input Data Plots ###########
 #########################################
@@ -82,8 +84,56 @@ epoch_seven, acc_train_seven, acc_val_seven = np.split(ary=np.genfromtxt(paths[2
 epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths[2]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 
 # Sadly, in the csv produced the top row is not commented out, resulting in nans
-# We need to manually remove them
-#epoch_two = epoch_two[1:], epoch_five = epoch_five[1:], epoch_seven = epoch_seven[1:]
+# We dont need to worry, though, because matplotlib ignores nans
+
+plt.subplots_adjust(wspace=0.5,hspace=1)
+
+ylim_acc = [0.75,1.02]
+ylim_loss = [-0.025,0.475]
+
+plt.subplot(221)
+plt.title('Two Layers')
+plt.plot(epoch_two, acc_train_two, label='train')
+plt.plot(epoch_two, acc_val_two, label='val')
+plt.legend(loc='best')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim(ylim_acc)
+plt.grid()
+
+plt.subplot(222)
+plt.title('Seven Layers')
+plt.plot(epoch_seven, acc_train_seven, label='train')
+plt.plot(epoch_seven, acc_val_seven, label='val')
+plt.legend(loc='best')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim(ylim_acc)
+plt.grid()
+
+plt.subplot(223)
+plt.title('Two Layers')
+plt.plot(epoch_two, loss_train_two, label='train')
+plt.plot(epoch_two, loss_val_two, label='val')
+plt.legend(loc='best')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.ylim(ylim_loss)
+plt.grid()
+
+plt.subplot(224)
+plt.title('Seven Layers')
+plt.plot(epoch_seven, loss_train_seven, label='train')
+plt.plot(epoch_seven, loss_val_seven, label='val')
+plt.legend(loc='best')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.ylim(ylim_loss)
+plt.grid()
+
+#plt.tight_layout() # Ist das besser oder schlechter so?
+#plt.show()
+plt.clf()
 
 
 #########################################
@@ -91,6 +141,8 @@ epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths
 #########################################
 
 i, label, cat, dog, wildlife = np.genfromtxt('7layer_predictions.txt',unpack=True)
+
+print(wildlife[label==0][0:30])
 
 
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
@@ -115,5 +167,54 @@ plt.hist(wildlife[label==0],label="Wildlife prediction",histtype="step",bins=[0,
 
 plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
 plt.legend(bbox_to_anchor=(-0.1,1))
-plt.show()
+#plt.show()
+plt.clf()
 
+#########################################
+########### 4) Overtraining check #######
+#########################################
+
+
+###
+
+
+
+#########################################
+########### 5) Performance Plot #########
+#########################################
+
+import itertools
+import matplotlib.cm as cm
+
+def plot_confusion_matrix(cm, classes,
+                          normalize=True,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+# with confusion matrix
+#confusion_matrix(y_true, y_pred)
