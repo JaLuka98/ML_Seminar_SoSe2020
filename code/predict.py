@@ -5,9 +5,9 @@ from generator import Generator
 import numpy as np
 
 
-def makepredictions(modelpath,outputfile):
+def makepredictions(modelpath,outputfile,training_dir):
 
-    train_dir = "afhq/val"
+    train_dir = training_dir
     image_num = 1500
     val_split = 0
     
@@ -16,14 +16,22 @@ def makepredictions(modelpath,outputfile):
     batch_size = 11
     
     print(np.argmax(y_test,axis=1))
-    
+
     test_generator = Generator(X_test_filenames, y_test, batch_size)
     
     reconstructed_model = keras.models.load_model(modelpath)
     
     prediction = reconstructed_model.predict_generator(test_generator)
     
+    print(X_test_filenames)
+    print(y_test)
+    print(prediction)
+    
     np.savetxt(outputfile,np.vstack((np.arange(1500),np.argmax(y_test,axis=1),np.array(prediction[:,0]),np.array(prediction[:,1]),np.array(prediction[:,2]))).T)
 
-makepredictions("logs_and_models/7layer/model0","7layer_predictions.txt")
-makepredictions("logs_and_models/finalrun/model1","2layer_predictions.txt")
+makepredictions("logs_and_models/7layer/model0","7layer_predictions_test.txt","afhq/val")
+makepredictions("logs_and_models/7layer/model0","7layer_predictions_train.txt","afhq/train")
+makepredictions("logs_and_models/finalrun/model1","2layer_predictions_test.txt","afhq/val")
+makepredictions("logs_and_models/finalrun/model1","2layer_predictions_train.txt","afhq/train")
+
+

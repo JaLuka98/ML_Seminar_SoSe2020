@@ -181,34 +181,36 @@ plt.clf()
 ########### 3) Network output ###########
 #########################################
 
-i, label, cat, dog, wildlife = np.genfromtxt('7layer_predictions.txt',unpack=True)
+i, label, cat, wildlife, dog = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
 
-print(wildlife[label==0][0:30])
-
+## wildlife = 1
+## cat = 0
+## dog = 2
 
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
 
-### Reihenfolg wild=0 - dog=1 - cat=2
-
 plt.subplot(131)
-plt.hist(cat[label==2],label="Cat prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
-plt.hist(cat[label==1],label="Dog prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
-plt.hist(cat[label==0],label="Wildlife prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.title("Cat output node")
+plt.hist(cat[label==0],label="Cat images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(cat[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(cat[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
 
 plt.subplot(132)
-plt.hist(dog[label==2],label="Cat prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
-plt.hist(dog[label==1],label="Dog prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
-plt.hist(dog[label==0],label="Wildlife prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.title("Dog output node")
+plt.hist(dog[label==0],label="Cat images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(dog[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(dog[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
 
 plt.subplot(133)
-plt.hist(wildlife[label==2],label="Cat prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
-plt.hist(wildlife[label==1],label="Dog prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
-plt.hist(wildlife[label==0],label="Wildlife prediction",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.title("Wildlife output node")
+plt.hist(wildlife[label==0],label="Cat images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(wildlife[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
+plt.hist(wildlife[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1])
 
 
 plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
 plt.legend(bbox_to_anchor=(-0.1,1))
-#plt.show()
+plt.savefig("plots/Network-output.pdf")
 plt.clf()
 
 #########################################
@@ -225,8 +227,8 @@ plt.clf()
 #########################################
 
 # Hier noch ein mal, weil ich nichts bei Punkt 3 verändern will. Mergen soll einfach sein
-i, label_2, cat_2, dog_2, wildlife_2 = np.genfromtxt('2layer_predictions.txt',unpack=True)
-i, label_7, cat_7, dog_7, wildlife_7 = np.genfromtxt('7layer_predictions.txt',unpack=True)
+i, label_2, cat_2, dog_2, wildlife_2 = np.genfromtxt('2layer_predictions_test.txt',unpack=True)
+i, label_7, cat_7, dog_7, wildlife_7 = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
 
 Y_pred_2 = np.vstack((dog_2, wildlife_2, cat_2)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes

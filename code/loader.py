@@ -22,7 +22,17 @@ def load_data(train_dir, image_num, val_split):
         print("subdir: " + str(subdir))
         print("dirs: " + str(dirs))
 
+
         filenames_counter = 0
+
+        if subdir.endswith("cat"):
+            labels_counter=0
+        if subdir.endswith("dog"):
+            labels_counter=2
+        if subdir.endswith("wild"):
+            labels_counter=1
+
+        print(labels_counter)
 
         for file in files:
             full_path = os.path.join(subdir, file)
@@ -32,8 +42,6 @@ def load_data(train_dir, image_num, val_split):
             filenames_counter = filenames_counter + 1
             if filenames_counter >= (image_num-2)/3:
                 break
-
-        labels_counter = labels_counter+1
 
     labels = np.delete(labels,0,0)
 
