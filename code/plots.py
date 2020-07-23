@@ -173,7 +173,7 @@ plt.ylim(ylim_loss)
 plt.grid()
 
 #plt.tight_layout() # Ist das besser oder schlechter so?
-#plt.show()
+plt.savefig('plots/acc_and_loss.pdf')
 plt.clf()
 
 
@@ -230,15 +230,27 @@ plt.clf()
 i, label_2, cat_2, wildlife_2, dog_2 = np.genfromtxt('2layer_predictions_test.txt',unpack=True)
 i, label_7, cat_7, wildlife_7, dog_7 = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
 
+# We relabel everything so that we have cat,dog,wild!
+# Otherwise I dont see a way to plot the confusion matrix like this
+wildlife = label_2 == 1
+dog = label_2 == 2
+label_2[wildlife] = 2
+label_2[dog] = 1
+
+wildlife = label_7 == 1
+dog = label_7 == 2
+label_7[wildlife] = 2
+label_7[dog] = 1
+
 #Y_pred_2 = np.vstack((dog_2, wildlife_2, cat_2)).T # Now it is in the common convention (1500,3)
-Y_pred_2 = np.vstack((cat_2, wildlife_2, dog_2)).T # Now it is in the common convention (1500,3)
+Y_pred_2 = np.vstack((cat_2, dog_2, wildlife_2)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes
 Y_cls_2 = np.argmax(Y_pred_2, axis = 1)
 conf_mat_2 = confusion_matrix(label_2, Y_cls_2)
 
 # Do the same for the seven layer model
 #Y_pred_7 = np.vstack((dog_7, wildlife_7, cat_7)).T # Now it is in the common convention (1500,3)
-Y_pred_7 = np.vstack((cat_7, wildlife_7, dog_7)).T # Now it is in the common convention (1500,3)
+Y_pred_7 = np.vstack((cat_7, dog_7, wildlife_7)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes
 Y_cls_7 = np.argmax(Y_pred_7, axis = 1)
 conf_mat_7 = confusion_matrix(label_7, Y_cls_7)
@@ -246,9 +258,9 @@ conf_mat_7 = confusion_matrix(label_7, Y_cls_7)
 # plot the confusion matrices side by side
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
 plt.subplot(121)
-plot_confusion_matrix(conf_mat_2, classes = ['dog', 'wildlife', 'cat'], normalize=False, title='Two Layers', colorbar=False)
+plot_confusion_matrix(conf_mat_2, classes = ['cat', 'dog', 'wildlife'], normalize=False, title='Two Layers', colorbar=False)
 plt.subplot(122)
-plot_confusion_matrix(conf_mat_7, classes = ['dog', 'wildlife', 'cat'], normalize=False, title='Seven Layers', colorbar=False)
+plot_confusion_matrix(conf_mat_7, classes = ['cat', 'dog', 'wildlife'], normalize=False, title='Seven Layers', colorbar=False)
 plt.tight_layout()
 plt.savefig('plots/confusion_matrix.pdf')
 plt.clf()
