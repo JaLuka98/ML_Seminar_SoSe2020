@@ -250,7 +250,7 @@ plt.savefig('plots/confusion_matrix.pdf')
 plt.clf()
 
 ##################################################
-########### 5) Understanding performance #########
+########### 6) Understanding performance #########
 ##################################################
 
 import matplotlib.pyplot as plt
