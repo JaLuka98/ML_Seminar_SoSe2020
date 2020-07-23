@@ -227,16 +227,18 @@ plt.clf()
 #########################################
 
 # Hier noch ein mal, weil ich nichts bei Punkt 3 verändern will. Mergen soll einfach sein
-i, label_2, cat_2, dog_2, wildlife_2 = np.genfromtxt('2layer_predictions_test.txt',unpack=True)
-i, label_7, cat_7, dog_7, wildlife_7 = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
+i, label_2, cat_2, wildlife_2, dog_2 = np.genfromtxt('2layer_predictions_test.txt',unpack=True)
+i, label_7, cat_7, wildlife_7, dog_7 = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
 
-Y_pred_2 = np.vstack((dog_2, wildlife_2, cat_2)).T # Now it is in the common convention (1500,3)
+#Y_pred_2 = np.vstack((dog_2, wildlife_2, cat_2)).T # Now it is in the common convention (1500,3)
+Y_pred_2 = np.vstack((cat_2, wildlife_2, dog_2)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes
 Y_cls_2 = np.argmax(Y_pred_2, axis = 1)
 conf_mat_2 = confusion_matrix(label_2, Y_cls_2)
 
 # Do the same for the seven layer model
-Y_pred_7 = np.vstack((dog_7, wildlife_7, cat_7)).T # Now it is in the common convention (1500,3)
+#Y_pred_7 = np.vstack((dog_7, wildlife_7, cat_7)).T # Now it is in the common convention (1500,3)
+Y_pred_7 = np.vstack((cat_7, wildlife_7, dog_7)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes
 Y_cls_7 = np.argmax(Y_pred_7, axis = 1)
 conf_mat_7 = confusion_matrix(label_7, Y_cls_7)
