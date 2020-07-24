@@ -1,0 +1,10 @@
+Falls das environment in conda existiert:
+
+- Neue Shell aufmachen
+- conda activate <name of environment>
+- conda env export | grep -v "^prefix: " > environment.yml
+- environment.yml enthält nun die Informationen über das environment, was in der Shell aktiviert war.
+
+Andere Nutzer können auf ihrem PC dann
+	conda env create -f environment.yml
+in eine Shell eingeben. Damit wird das environment lokal installiert und sie koennen unsere Programme ausführen!
