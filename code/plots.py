@@ -217,30 +217,79 @@ plt.clf()
 ########### 4) Overtraining check #######
 #########################################
 
+# Function that takes an array and swaps all ones and twos with each other
+def resort_labels(labels):
+    ones = labels == 1
+    twos = labels == 2
+    labels[ones] = 2
+    labels[twos] = 1
+    return labels
 
-###
 
+i, label_train_2, cat_train_2, wildlife_train_2, dog_train_2 = np.genfromtxt('2layer_predictions_train.txt',unpack=True)
+i, label_train_7, cat_train_7, wildlife_train_7, dog_train_7 = np.genfromtxt('7layer_predictions_train.txt',unpack=True)
 
-
-#########################################
-########### 5) Performance Plot #########
-#########################################
-
-# Hier noch ein mal, weil ich nichts bei Punkt 3 verändern will. Mergen soll einfach sein
 i, label_2, cat_2, wildlife_2, dog_2 = np.genfromtxt('2layer_predictions_test.txt',unpack=True)
 i, label_7, cat_7, wildlife_7, dog_7 = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
 
 # We relabel everything so that we have cat,dog,wild!
-# Otherwise I dont see a way to plot the confusion matrix like this
-wildlife = label_2 == 1
-dog = label_2 == 2
-label_2[wildlife] = 2
-label_2[dog] = 1
+label_train_2 = resort_labels(label_train_2)
+label_2 = resort_labels(label_2)
 
-wildlife = label_7 == 1
-dog = label_7 == 2
-label_7[wildlife] = 2
-label_7[dog] = 1
+label_train_7 = resort_labels(label_train_7)
+label_7 = resort_labels(label_7)
+
+# Ab jetzt also: Cat=0, dog=1, wild=2
+
+def plot_cumulative_distribution(type, dists, labels, binning, classcode, classname):
+    if type=='Two':
+        c = 'orange'
+    elif type=='Seven':
+        c = 'crimson'
+
+    train_val = dists[0]
+    test = dists[1]
+    label_train_val = labels[0]
+    label_test = labels[1]
+    plt.hist(train_val[label_train_val==classcode], bins=binning, density=True, histtype='step',
+             cumulative=True, label=type+' Layers', color=c, linestyle='-')
+    plt.hist(test[label_test==classcode], bins=binning, density=True, histtype='step',
+             cumulative=True, color=c, linestyle='--')
+    plt.title('True ' + classname + 's')
+    plt.xlim([0,1])
+    plt.ylim(1.5*1e-3,1)
+    plt.yscale('log')
+    plt.xlabel(classname + ' output node')
+    plt.ylabel('ECDF (normed)')
+    plt.legend(loc='upper center')
+    plt.tight_layout()
+
+binning = np.linspace(0,1,100)
+plt.figure(figsize=(9,3))
+plt.subplot(131)
+plot_cumulative_distribution(type='Two', dists=[cat_train_2, cat_2], labels=[label_train_2, label_2],
+                             binning=binning, classcode=0, classname='cat')
+plot_cumulative_distribution(type='Seven', dists=[cat_train_7, cat_7], labels=[label_train_7, label_7],
+                             binning=binning, classcode=0, classname='cat')
+plt.grid()
+plt.subplot(132)
+plot_cumulative_distribution(type='Two', dists=[dog_train_2, dog_2], labels=[label_train_2, label_2],
+                             binning=binning, classcode=1, classname='dog')
+plot_cumulative_distribution(type='Seven', dists=[dog_train_7, dog_7], labels=[label_train_7, label_7],
+                             binning=binning, classcode=1, classname='dog')
+plt.grid()
+plt.subplot(133)
+plot_cumulative_distribution(type='Two', dists=[wildlife_train_2, wildlife_2], labels=[label_train_2, label_2],
+                             binning=binning, classcode=2, classname='wild animal')
+plot_cumulative_distribution(type='Seven', dists=[wildlife_train_7, wildlife_7], labels=[label_train_7, label_7],
+                             binning=binning, classcode=2, classname='wild animal')
+plt.grid()
+plt.savefig('plots/cumulative.pdf')
+plt.clf()
+
+#########################################
+########### 5) Performance Plot #########
+#########################################
 
 #Y_pred_2 = np.vstack((dog_2, wildlife_2, cat_2)).T # Now it is in the common convention (1500,3)
 Y_pred_2 = np.vstack((cat_2, dog_2, wildlife_2)).T # Now it is in the common convention (1500,3)
