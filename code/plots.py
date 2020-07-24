@@ -6,11 +6,13 @@ from loader import load_data
 
 import matplotlib.pyplot as plt
 
-from sklearn.metrics import confusion_matrix
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, classification_report
 
 # For plot_confusion_matrix
 import itertools
 import matplotlib.cm as cm
+
 
 # Acknowledgement to Olaf Nackenhorst Exercise 4 ML Seminar summer term 2020, TU Dortmund
 def plot_confusion_matrix(cm, classes,
@@ -325,16 +327,14 @@ plt.clf()
 ########### 5) Performance Plot #########
 #########################################
 
-#Y_pred_2 = np.vstack((dog_2, wildlife_2, cat_2)).T # Now it is in the common convention (1500,3)
 Y_pred_2 = np.vstack((cat_2, dog_2, wildlife_2)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes
 Y_cls_2 = np.argmax(Y_pred_2, axis = 1)
 conf_mat_2 = confusion_matrix(label_2, Y_cls_2)
 
 # Do the same for the seven layer model
-#Y_pred_7 = np.vstack((dog_7, wildlife_7, cat_7)).T # Now it is in the common convention (1500,3)
 Y_pred_7 = np.vstack((cat_7, dog_7, wildlife_7)).T # Now it is in the common convention (1500,3)
-# Number of examples, number of classes
+# 1500: Number of examples, 3: number of classes
 Y_cls_7 = np.argmax(Y_pred_7, axis = 1)
 conf_mat_7 = confusion_matrix(label_7, Y_cls_7)
 
@@ -398,3 +398,72 @@ plot_roc_curves(label_2, Y_pred_2, title='Two Layers')
 plt.subplot(122)
 plot_roc_curves(label_7, Y_pred_7, title='Seven Layers')
 plt.savefig('plots/ROC_Curves.pdf')
+plt.clf()
+
+######################################################
+########### 7) Vergleich mit Alternative #############
+######################################################
+
+# We load the saved data, fit the knn and do prediction on the unseen test set
+X_train = np.load(file="alternative/X_pca_train.npy")
+y_train = np.load(file="alternative/labels_train.npy")
+
+X_test = np.load(file="alternative/X_pca_test.npy")
+y_test = np.load(file="alternative/labels_test.npy")
+
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.3, random_state=42)
+
+neigh = KNeighborsClassifier(n_neighbors=25)
+neigh.fit(X_train, y_train)
+y_pred = neigh.predict(X_test)
+
+report_knn = classification_report(y_test, y_pred, output_dict=True)
+report_2 = classification_report(label_2.astype(int), Y_cls_2, output_dict=True)
+print(label_2.shape)
+report_7 = classification_report(label_7.astype(int), Y_cls_7, output_dict=True)
+
+
+def plot_bars(classname, report_knn=report_knn, report_2=report_2, report_7=report_7):
+    # Transform name of class to label
+    label = '0'
+    if classname=='cats':
+        label = '0'
+    elif classname=='dogs':
+        label = '1'
+    elif classname=='wildlife':
+        label = '2'
+
+    # set width of bar
+    barWidth = 0.25
+
+    # set height of bars
+    # Note that 0.0 is there because for some reason the labels were saved as floats for the neural networks
+    bars1 = [report_2[label]['precision'], report_7[label]['precision'], report_knn[label]['precision']]
+    bars2 = [report_2[label]['recall'], report_7[label]['recall'], report_knn[label]['recall']]
+    bars3 = [report_2[label]['f1-score'], report_2[label]['f1-score'], report_knn[label]['f1-score']]
+
+    # Set position of bar on X axis
+    r1 = np.arange(len(bars1))
+    r2 = [x + barWidth for x in r1]
+    r3 = [x + barWidth for x in r2]
+
+    # Make the plot
+    plt.bar(r1, bars1, color='#7f6d5f', width=barWidth, edgecolor='white', label='Precision')
+    plt.bar(r2, bars2, color='#557f2d', width=barWidth, edgecolor='white', label='Recall')
+    plt.bar(r3, bars3, color='#2d7f5e', width=barWidth, edgecolor='white', label=r'F$_1$ score')
+    plt.grid(alpha=0.5)
+    # Add xticks on the middle of the group bars
+    plt.title(classname, fontweight='bold')
+    plt.xticks([r + barWidth for r in range(len(bars1))], ['Two\nLayers', 'Seven\nLayers', 'kNN'])
+    # Create legend & Show graphic
+    plt.legend()
+    plt.tight_layout()
+
+plt.figure(figsize=(9,3))
+plt.subplot(131)
+plot_bars(classname='cats')
+plt.subplot(132)
+plot_bars(classname='dogs')
+plt.subplot(133)
+plot_bars(classname='wildlife')
+plt.savefig('plots/comparison.pdf')
