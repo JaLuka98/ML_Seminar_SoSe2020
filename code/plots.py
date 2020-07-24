@@ -181,7 +181,7 @@ plt.clf()
 ########### 3) Network output ###########
 #########################################
 
-i, label, cat, wildlife, dog = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
+i, label, cat, wildlife, dog = np.genfromtxt('predictions/7layer_predictions_test.txt',unpack=True)
 
 ## wildlife = 1
 ## cat = 0
@@ -226,11 +226,11 @@ def resort_labels(labels):
     return labels
 
 
-i, label_train_2, cat_train_2, wildlife_train_2, dog_train_2 = np.genfromtxt('2layer_predictions_train.txt',unpack=True)
-i, label_train_7, cat_train_7, wildlife_train_7, dog_train_7 = np.genfromtxt('7layer_predictions_train.txt',unpack=True)
+i, label_train_2, cat_train_2, wildlife_train_2, dog_train_2 = np.genfromtxt('predictions/2layer_predictions_train.txt',unpack=True)
+i, label_train_7, cat_train_7, wildlife_train_7, dog_train_7 = np.genfromtxt('predictions/7layer_predictions_train.txt',unpack=True)
 
-i, label_2, cat_2, wildlife_2, dog_2 = np.genfromtxt('2layer_predictions_test.txt',unpack=True)
-i, label_7, cat_7, wildlife_7, dog_7 = np.genfromtxt('7layer_predictions_test.txt',unpack=True)
+i, label_2, cat_2, wildlife_2, dog_2 = np.genfromtxt('predictions/2layer_predictions_test.txt',unpack=True)
+i, label_7, cat_7, wildlife_7, dog_7 = np.genfromtxt('predictions/7layer_predictions_test.txt',unpack=True)
 
 # We relabel everything so that we have cat,dog,wild!
 label_train_2 = resort_labels(label_train_2)

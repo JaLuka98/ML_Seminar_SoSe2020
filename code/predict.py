@@ -29,9 +29,9 @@ def makepredictions(modelpath,outputfile,training_dir):
     
     np.savetxt(outputfile,np.vstack((np.arange(1500),np.argmax(y_test,axis=1),np.array(prediction[:,0]),np.array(prediction[:,1]),np.array(prediction[:,2]))).T)
 
-makepredictions("logs_and_models/7layer/model0","7layer_predictions_test.txt","afhq/val")
-makepredictions("logs_and_models/7layer/model0","7layer_predictions_train.txt","afhq/train")
-makepredictions("logs_and_models/finalrun/model1","2layer_predictions_test.txt","afhq/val")
-makepredictions("logs_and_models/finalrun/model1","2layer_predictions_train.txt","afhq/train")
+makepredictions("logs_and_models/7layer/model0","predictions/7layer_predictions_test.txt","afhq/val")
+makepredictions("logs_and_models/7layer/model0","predictions/7layer_predictions_train.txt","afhq/train")
+makepredictions("logs_and_models/finalrun/model1","predictions/2layer_predictions_test.txt","afhq/val")
+makepredictions("logs_and_models/finalrun/model1","predictions/2layer_predictions_train.txt","afhq/train")
 
 
