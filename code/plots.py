@@ -210,7 +210,7 @@ plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
 plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
 plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
 
-
+plt.yscale('log')
 
 
 plt.subplot(132)
@@ -243,6 +243,8 @@ counts_wild,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.
 plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
 plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
 plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+
+plt.yscale('log')
 
 plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
 plt.legend(bbox_to_anchor=(-0.1,1))
@@ -422,8 +424,16 @@ report_2 = classification_report(label_2.astype(int), Y_cls_2, output_dict=True)
 print(label_2.shape)
 report_7 = classification_report(label_7.astype(int), Y_cls_7, output_dict=True)
 
+# We also load the dnn predictions as a final alternative method
+i, label_dnn, cat_dnn, wildlife_dnn, dog_dnn = np.genfromtxt('predictions/dnn_predictions_test.txt',unpack=True)
 
-def plot_bars(classname, report_knn=report_knn, report_2=report_2, report_7=report_7):
+# We relabel everything so that we have cat,dog,wild!
+label_dnn = resort_labels(label_dnn)
+Y_pred_dnn = np.vstack((cat_dnn, dog_dnn, wildlife_dnn)).T
+Y_cls_dnn = np.argmax(Y_pred_dnn, axis = 1)
+report_dnn = classification_report(label_dnn.astype(int), Y_cls_dnn, output_dict=True)
+
+def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, report_2=report_2, report_7=report_7):
     # Transform name of class to label
     label = '0'
     if classname=='cats':
@@ -438,9 +448,9 @@ def plot_bars(classname, report_knn=report_knn, report_2=report_2, report_7=repo
 
     # set height of bars
     # Note that 0.0 is there because for some reason the labels were saved as floats for the neural networks
-    bars1 = [report_2[label]['precision'], report_7[label]['precision'], report_knn[label]['precision']]
-    bars2 = [report_2[label]['recall'], report_7[label]['recall'], report_knn[label]['recall']]
-    bars3 = [report_2[label]['f1-score'], report_2[label]['f1-score'], report_knn[label]['f1-score']]
+    bars1 = [report_knn[label]['precision'], report_dnn[label]['precision'], report_2[label]['precision'], report_7[label]['precision']]
+    bars2 = [report_knn[label]['recall'], report_dnn[label]['recall'], report_2[label]['recall'], report_7[label]['recall']]
+    bars3 = [report_knn[label]['f1-score'], report_dnn[label]['f1-score'], report_2[label]['f1-score'], report_2[label]['f1-score']]
 
     # Set position of bar on X axis
     r1 = np.arange(len(bars1))
@@ -454,16 +464,18 @@ def plot_bars(classname, report_knn=report_knn, report_2=report_2, report_7=repo
     plt.grid(alpha=0.5)
     # Add xticks on the middle of the group bars
     plt.title(classname, fontweight='bold')
-    plt.xticks([r + barWidth for r in range(len(bars1))], ['Two\nLayers', 'Seven\nLayers', 'kNN'])
-    # Create legend & Show graphic
-    plt.legend()
+    plt.xticks([r + barWidth for r in range(len(bars1))], [ 'kNN', 'DNN', 'Two\nLayers', 'Seven\nLayers'])
+    plt.xlim([-0.25,3.75])
+    plt.ylim([0.0,1.35])
+    plt.hlines(1,-4,4, linestyles='dashed')
+    if legend==True: plt.legend()
     plt.tight_layout()
 
 plt.figure(figsize=(9,3))
 plt.subplot(131)
-plot_bars(classname='cats')
+plot_bars(classname='cats', legend=False)
 plt.subplot(132)
-plot_bars(classname='dogs')
+plot_bars(classname='dogs', legend=True)
 plt.subplot(133)
-plot_bars(classname='wildlife')
+plot_bars(classname='wildlife', legend=False)
 plt.savefig('plots/comparison.pdf')
