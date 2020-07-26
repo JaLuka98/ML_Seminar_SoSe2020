@@ -298,7 +298,7 @@ def plot_cumulative_distribution(type, dists, labels, binning, classcode, classn
     plt.ylim(1.5*1e-3,1)
     plt.yscale('log')
     plt.xlabel(classname + ' output node')
-    plt.ylabel('ECDF (normed)')
+    plt.ylabel('EDF (normed)')
     plt.legend(loc='upper center')
     plt.tight_layout()
 
@@ -366,6 +366,7 @@ def lin(x,a,b):
     return a*x+b
 
 def plot_roc_curves(label, Y_pred, title='ROC Curves'):
+    classnames=['cats','dogs','wildlife']
     # Binarize the output
     Y_one_hot = label_binarize(label, classes=[0, 1, 2])
 
@@ -379,7 +380,7 @@ def plot_roc_curves(label, Y_pred, title='ROC Curves'):
         colors = cycle(['blue', 'red', 'green'])
     for i, color in zip(range(3), colors):
         plt.plot(fpr[i], tpr[i], color=color,
-                label='ROC class {0} (AUC = {1:0.3f})'
+                label= classnames[i]+' (AUC = {1:0.3f})'
                 ''.format(i, roc_auc[i]))
         plt.plot(x_plot, lin(x_plot, 1,0), 'k--')
         plt.xlim([0.001, 1.0])
@@ -420,6 +421,7 @@ neigh.fit(X_train, y_train)
 y_pred = neigh.predict(X_test)
 
 report_knn = classification_report(y_test, y_pred, output_dict=True)
+print('Report knn',classification_report(y_test, y_pred))
 report_2 = classification_report(label_2.astype(int), Y_cls_2, output_dict=True)
 print(label_2.shape)
 report_7 = classification_report(label_7.astype(int), Y_cls_7, output_dict=True)
@@ -432,6 +434,8 @@ label_dnn = resort_labels(label_dnn)
 Y_pred_dnn = np.vstack((cat_dnn, dog_dnn, wildlife_dnn)).T
 Y_cls_dnn = np.argmax(Y_pred_dnn, axis = 1)
 report_dnn = classification_report(label_dnn.astype(int), Y_cls_dnn, output_dict=True)
+
+print('DNN report', classification_report(label_dnn.astype(int), Y_cls_dnn))
 
 def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, report_2=report_2, report_7=report_7):
     # Transform name of class to label
