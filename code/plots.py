@@ -105,9 +105,9 @@ plt.clf()
 #########################################
 
 # Get the raw tensorboard logs from these paths
-paths = ['logs_and_models/finalrun/logs/tensorboard/1',
-         'logs_and_models/finalrun/logs/tensorboard/0',
-         'logs_and_models/7layer/logs/tensorboard/0']
+# First the model with 2 layers, then the one with 7 layers
+paths = ['logs_and_models/logs/tensorboard/2',
+         'logs_and_models/logs/tensorboard/1']
 
 # Convert the tensorboard data to csv if it does not exist already
 for path in paths:
@@ -120,11 +120,11 @@ for path in paths:
 epoch_two, acc_train_two, acc_val_two = np.split(ary=np.genfromtxt(paths[0]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
 epoch_two, loss_train_two, loss_val_two = np.split(ary=np.genfromtxt(paths[0]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 # Now: 5 Layer
-epoch_five, acc_train_five, acc_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
-epoch_five, loss_train_five, loss_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
+#epoch_five, acc_train_five, acc_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
+#epoch_five, loss_train_five, loss_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 # Finally: 7 Layer
-epoch_seven, acc_train_seven, acc_val_seven = np.split(ary=np.genfromtxt(paths[2]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
-epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths[2]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
+epoch_seven, acc_train_seven, acc_val_seven = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
+epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 
 # Sadly, in the csv produced the top row is not commented out, resulting in nans
 # We dont need to worry, though, because matplotlib ignores nans
@@ -132,7 +132,7 @@ epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths
 plt.subplots_adjust(wspace=0.5,hspace=1)
 
 ylim_acc = [0.75,1.02]
-ylim_loss = [-0.025,0.475]
+ylim_loss = [-0.025,0.65]
 
 plt.subplot(221)
 plt.title('Two Layers')
