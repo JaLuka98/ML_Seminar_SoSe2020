@@ -82,19 +82,20 @@ y_test = np.bincount(y_test)
 
 labels = ['cat','dog','wildlife']
 
-plt.subplots_adjust(wspace=0.5,hspace=1)
+plt.figure(figsize=(14,5))
+plt.subplots_adjust(wspace=0.35,hspace=1)
 
 plt.subplot(131)
 plt.title('Trainings Datensatz')
-plt.bar(labels,y_train,color=['red','green','blue'])
+plt.bar(labels,y_train,color=['red','green','blue'],alpha=0.6)
 
 plt.subplot(132)
 plt.title('Validierungs Datensatz')
-plt.bar(labels,y_val,color=['red','green','blue'])
+plt.bar(labels,y_val,color=['red','green','blue'],alpha=0.6)
 
 plt.subplot(133)
 plt.title('Test Datensatz')
-plt.bar(labels,y_test,color=['red','green','blue'])
+plt.bar(labels,y_test,color=['red','green','blue'],alpha=0.6)
 
 
 plt.savefig('plots/barplot_input.pdf')
@@ -128,6 +129,7 @@ epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths
 
 # Sadly, in the csv produced the top row is not commented out, resulting in nans
 # We dont need to worry, though, because matplotlib ignores nans
+
 
 plt.subplots_adjust(wspace=0.5,hspace=1)
 
@@ -183,73 +185,101 @@ plt.clf()
 ########### 3) Network output ###########
 #########################################
 
-i, label, cat, wildlife, dog = np.genfromtxt('predictions/7layer_predictions_train.txt',unpack=True)
-i_test, label_test, cat_test, wildlife_test, dog_test = np.genfromtxt('predictions/7layer_predictions_test.txt',unpack=True)
+import seaborn as sns
+
+
 
 ## wildlife = 1
 ## cat = 0
 ## dog = 2
 
-plt.figure(figsize=(14,5))
-plt.subplots_adjust(wspace=0.3,hspace=0.35)
+def plotoutput(predictionpath,printname):
+
+    i, label, cat, wildlife, dog = np.genfromtxt(predictionpath+'_train.txt',unpack=True)
+    i_test, label_test, cat_test, wildlife_test, dog_test = np.genfromtxt(predictionpath+'_test.txt',unpack=True)
+
+    plt.figure(figsize=(15,5))
+    plt.subplots_adjust(wspace=0.25,hspace=0.3)
 
 
-plt.subplot(131)
-plt.title("Cat output node")
-plt.hist(cat[label==0],label="Cat images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="red",density=True)
-plt.hist(cat[label==2],label="Dog images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
-plt.hist(cat[label==1],label="Wildlife images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
+    plt.subplot(131)
+    plt.title("Cat output node")
+    plt.hist(cat[label==0],label="Cat images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
+    plt.hist(cat[label!=0],label="Non Cat images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
+    #plt.hist(cat[label==2],label="Dog images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
+    #plt.hist(cat[label==1],label="Wildlife images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
 
-counts_cat,bin_edges = np.histogram(cat_test[label_test==0],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-counts_dog,bin_edges = np.histogram(cat_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-counts_wild,bin_edges = np.histogram(cat_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    counts_cat,bin_edges = np.histogram(cat_test[label_test==0],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
+    counts_other,bin_edges = np.histogram(cat_test[label_test!=0],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
+    #counts_dog,bin_edges = np.histogram(cat_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    #counts_wild,bin_edges = np.histogram(cat_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    
+    bin_centres = (bin_edges[:-1] + bin_edges[1:])/2.
+    
+    plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
+    plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Cat images test")
+    #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
+    #plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+    plt.legend()
+    plt.yscale('log')
+    plt.grid()
+    
+    
+    
+    
+    plt.subplot(132)
+    plt.title("Dog output node")
+    plt.hist(dog[label==2],label="Dog images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
+    plt.hist(dog[label!=2],label="Non dog images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
+    #plt.hist(dog[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
+    #plt.hist(dog[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
+    
+    counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
+    counts_other,bin_edges = np.histogram(dog_test[label_test!=2],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
+    #counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    #counts_wild,bin_edges = np.histogram(dog_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    
+    
+    plt.plot(bin_centres,counts_dog,'ro',alpha=0.8, label="Dog images test")
+    plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Dog images test")
+    #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
+    #plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+    plt.legend()
+    plt.yscale('log')
+    plt.grid()
+    
+    
+    
+    
+    
+    plt.subplot(133)
+    plt.title("Wildlife output node")
+    plt.hist(wildlife[label==1],label="Wildlife images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
+    plt.hist(wildlife[label!=1],label="Non Wildlife images test",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
+    #plt.hist(wildlife[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=0.5,color="blue",density=True)
+    #plt.hist(wildlife[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
+    
+    counts_wildlife,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
+    counts_other,bin_edges = np.histogram(wildlife_test[label_test!=1],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
+    #counts_dog,bin_edges = np.histogram(wildlife_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    #counts_wild,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
+    
+    plt.plot(bin_centres,counts_wildlife,'ro',alpha=0.8, label="Wildlife images test")
+    plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Wildlife images test")
+    #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
+    #plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+    plt.legend()
+    plt.yscale('log')
+    plt.grid()
+    
+    plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
+    #plt.legend(bbox_to_anchor=(-0.1,1))
+    plt.savefig("plots/Network-output"+printname+".pdf")
+    plt.clf()
 
-bin_centres = (bin_edges[:-1] + bin_edges[1:])/2.
+plotoutput("predictions/7layer_predictions","_7layer")
+plotoutput("predictions/2layer_predictions","_2layer")
 
-plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
-plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
-plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
-
-plt.yscale('log')
-
-
-plt.subplot(132)
-plt.title("Dog output node")
-plt.hist(dog[label==0],label="Cat images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="red",density=True)
-plt.hist(dog[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
-plt.hist(dog[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
-
-counts_cat,bin_edges = np.histogram(dog_test[label_test==0],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-counts_wild,bin_edges = np.histogram(dog_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-
-plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
-plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
-plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
-
-plt.yscale('log')
-
-
-plt.subplot(133)
-plt.title("Wildlife output node")
-plt.hist(wildlife[label==0],label="Cat images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="red",density=True)
-plt.hist(wildlife[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
-plt.hist(wildlife[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
-
-counts_cat,bin_edges = np.histogram(wildlife_test[label_test==0],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-counts_dog,bin_edges = np.histogram(wildlife_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-counts_wild,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-
-plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
-plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
-plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
-
-plt.yscale('log')
-
-plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
-plt.legend(bbox_to_anchor=(-0.1,1))
-plt.savefig("plots/Network-output.pdf")
-plt.clf()
 
 #########################################
 ########### 4) Overtraining check #######
