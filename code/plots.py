@@ -452,6 +452,7 @@ def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, r
     bars2 = [report_knn[label]['recall'], report_dnn[label]['recall'], report_2[label]['recall'], report_7[label]['recall']]
     bars3 = [report_knn[label]['f1-score'], report_dnn[label]['f1-score'], report_2[label]['f1-score'], report_2[label]['f1-score']]
 
+
     # Set position of bar on X axis
     r1 = np.arange(len(bars1))
     r2 = [x + barWidth for x in r1]

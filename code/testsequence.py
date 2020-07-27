@@ -41,7 +41,7 @@ class Testsequence:
         for i in range(0,numdense):
             model.add(Dense(units[i], activation='relu'))
 
-        model.add(Dense(3, activation='sigmoid'))
+        model.add(Dense(3, activation='softmax'))
 
         self.models.append(model)
     # numconvlayer: Anzahl convolutional layer (int)
@@ -78,7 +78,7 @@ class Testsequence:
             if not dropout[i+numconvlayer] == 0:
                 model.add(Dropout(dropout[i]))
             
-        model.add(Dense(3, activation='sigmoid'))
+        model.add(Dense(3, activation='softmax'))
 
         self.models.append(model)
 
@@ -106,7 +106,7 @@ class Testsequence:
 
     def compileall(self):
         for model in self.models:
-            model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+            model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
     def trainall(self, traingenerator, valgenerator, safe):
         i = 0
