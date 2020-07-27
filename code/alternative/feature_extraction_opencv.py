@@ -40,21 +40,16 @@ def get_label_from_path(path):
 
 
 def extract_color_histogram(image, bins=(8, 8, 8)):
-	# extract a 3D color histogram from the HSV color space using
-	# the supplied number of `bins` per channel
+	# extract a 3D color histogram
 	hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 	# 1: Source array, 2: channels to be used (all, since only single image at a time)
 	# 3: Dont use a mask, how should the binning be
 	hist = cv2.calcHist([hsv], [0, 1, 2], None, bins,
 		[0, 256, 0, 256, 0, 256])
 	# Will become (8,8,8) hist
+	# 256 because [0,256] actually means half open interval ,256) :/
 	# handle normalizing the histogram if we are using OpenCV 2.4.X
-	if imutils.is_cv2():
-		hist = cv2.normalize(hist)
-	# otherwise, perform "in place" normalization in OpenCV 3 (I
-	# personally hate the way this is done
-	else:
-		cv2.normalize(hist, hist)
+	cv2.normalize(hist, hist)
 	# return the flattened histogram as the feature vector
 	return hist.flatten()
 
@@ -73,10 +68,6 @@ def gs_color_hists(path_get, path_store, path_labels):
 		image = cv2.imread(imagePath)
 		label = get_label_from_path(path=imagePath)
 		y.append(label)
-		# extract raw pixel intensity "features", followed by a color
-		# histogram to characterize the color distribution of the pixels
-		# in the image
-		#pixels = image_to_feature_vector(image)
 		hist = extract_color_histogram(image)
 		X.append(hist)
 
@@ -89,9 +80,14 @@ def gs_color_hists(path_get, path_store, path_labels):
 	np.save(file=path_store, arr=X)
 	np.save(file=path_labels, arr=y)
 
+# Set this variable if you want to extract the color histograms from the pictures...
+# ...and store them and the pca transformed data on disk.
+# You can set store = False, then the data wont be saved to disk.
+store = True
 
-#gs_color_hists(path_get="../afhq/train", path_store="./color_hists_train", path_labels="./labels_train")
-#gs_color_hists(path_get="../afhq/val", path_store="./color_hists_test", path_labels="./labels_test")
+if store:
+	gs_color_hists(path_get="../afhq/train", path_store="./color_hists_train", path_labels="./labels_train")
+	gs_color_hists(path_get="../afhq/val", path_store="./color_hists_test", path_labels="./labels_test")
 
 X = np.load(file="./color_hists_train.npy")
 y = np.load(file="./labels_train.npy")
@@ -104,11 +100,11 @@ X_train = pca.transform(X_train)
 X_val = pca.transform(X_val)
 X = pca.transform(X) # for boundary regions
 print(X_train.shape)
-#np.save(file='X_pca_train', arr=X)
+if store: np.save(file='X_pca_train', arr=X)
 
 X_test = np.load(file="./color_hists_test.npy")
 X_test = pca.transform(X_test)
-#np.save(file='X_pca_test', arr=X_test)
+if store: np.save(file='X_pca_test', arr=X_test)
 
 neigh = KNeighborsClassifier(n_neighbors=25)
 neigh.fit(X_train, y_train)
@@ -133,23 +129,3 @@ sns.distplot(X[:,1][y==2], hist=False, label='wild')
 plt.xlabel('Second principal component')
 plt.ylabel('KDE')
 plt.savefig('kde_sns_2.pdf')
-
-#plot_decision_regions(X=X[0:200,:], y=y[0:200], clf=neigh, legend=2)
-#plt.show()
-
-#img = cv2.imread('../afhq/train/cat/flickr_cat_000015.jpg')
-#print(img.shape)
-
-#hist = extract_color_histogram(img)
-
-#plt.figure(figsize=(4.2, 4))
-#for i in range(0,max_patches):
-#    plt.subplot(9, 9, i + 1)
-#    plt.imshow(data[i,:,:].reshape(patch_size), cmap=plt.cm.gray, interpolation='nearest')
-#    plt.xticks(())
-#    plt.yticks(())
-#    plt.savefig('patches_test3.pdf')
-#
-#plt.clf()
-#plt.imshow(img, cmap=plt.cm.gray, interpolation='nearest')
-#plt.savefig('cat3.pdf')
