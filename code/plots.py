@@ -86,15 +86,15 @@ plt.figure(figsize=(14,5))
 plt.subplots_adjust(wspace=0.35,hspace=1)
 
 plt.subplot(131)
-plt.title('Trainings Datensatz')
+plt.title('Trainingsdatensatz')
 plt.bar(labels,y_train,color=['red','green','blue'],alpha=0.6)
 
 plt.subplot(132)
-plt.title('Validierungs Datensatz')
+plt.title('Validierungsdatensatz')
 plt.bar(labels,y_val,color=['red','green','blue'],alpha=0.6)
 
 plt.subplot(133)
-plt.title('Test Datensatz')
+plt.title('Testdatensatz')
 plt.bar(labels,y_test,color=['red','green','blue'],alpha=0.6)
 
 
@@ -213,9 +213,9 @@ def plotoutput(predictionpath,printname):
     counts_other,bin_edges = np.histogram(cat_test[label_test!=0],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     #counts_dog,bin_edges = np.histogram(cat_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
     #counts_wild,bin_edges = np.histogram(cat_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-    
+
     bin_centres = (bin_edges[:-1] + bin_edges[1:])/2.
-    
+
     plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
     plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Cat images test")
     #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
@@ -223,23 +223,23 @@ def plotoutput(predictionpath,printname):
     plt.legend()
     plt.yscale('log')
     plt.grid()
-    
-    
-    
-    
+
+
+
+
     plt.subplot(132)
     plt.title("Dog output node")
     plt.hist(dog[label==2],label="Dog images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
     plt.hist(dog[label!=2],label="Non dog images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
     #plt.hist(dog[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
     #plt.hist(dog[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
-    
+
     counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     counts_other,bin_edges = np.histogram(dog_test[label_test!=2],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     #counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
     #counts_wild,bin_edges = np.histogram(dog_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-    
-    
+
+
     plt.plot(bin_centres,counts_dog,'ro',alpha=0.8, label="Dog images test")
     plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Dog images test")
     #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
@@ -247,23 +247,23 @@ def plotoutput(predictionpath,printname):
     plt.legend()
     plt.yscale('log')
     plt.grid()
-    
-    
-    
-    
-    
+
+
+
+
+
     plt.subplot(133)
     plt.title("Wildlife output node")
     plt.hist(wildlife[label==1],label="Wildlife images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
     plt.hist(wildlife[label!=1],label="Non Wildlife images test",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
     #plt.hist(wildlife[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=0.5,color="blue",density=True)
     #plt.hist(wildlife[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
-    
+
     counts_wildlife,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     counts_other,bin_edges = np.histogram(wildlife_test[label_test!=1],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     #counts_dog,bin_edges = np.histogram(wildlife_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
     #counts_wild,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-    
+
     plt.plot(bin_centres,counts_wildlife,'ro',alpha=0.8, label="Wildlife images test")
     plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Wildlife images test")
     #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
@@ -271,7 +271,7 @@ def plotoutput(predictionpath,printname):
     plt.legend()
     plt.yscale('log')
     plt.grid()
-    
+
     plt.subplots_adjust(top=0.9, left=0.1, right=0.9, bottom=0.12)
     #plt.legend(bbox_to_anchor=(-0.1,1))
     plt.savefig("plots/Network-output"+printname+".pdf")
