@@ -105,9 +105,9 @@ plt.clf()
 #########################################
 
 # Get the raw tensorboard logs from these paths
-paths = ['logs_and_models/finalrun/logs/tensorboard/1',
-         'logs_and_models/finalrun/logs/tensorboard/0',
-         'logs_and_models/7layer/logs/tensorboard/0']
+# First the model with 2 layers, then the one with 7 layers
+paths = ['logs_and_models/logs/tensorboard/2',
+         'logs_and_models/logs/tensorboard/1']
 
 # Convert the tensorboard data to csv if it does not exist already
 for path in paths:
@@ -120,11 +120,11 @@ for path in paths:
 epoch_two, acc_train_two, acc_val_two = np.split(ary=np.genfromtxt(paths[0]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
 epoch_two, loss_train_two, loss_val_two = np.split(ary=np.genfromtxt(paths[0]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 # Now: 5 Layer
-epoch_five, acc_train_five, acc_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
-epoch_five, loss_train_five, loss_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
+#epoch_five, acc_train_five, acc_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
+#epoch_five, loss_train_five, loss_val_five = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 # Finally: 7 Layer
-epoch_seven, acc_train_seven, acc_val_seven = np.split(ary=np.genfromtxt(paths[2]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
-epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths[2]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
+epoch_seven, acc_train_seven, acc_val_seven = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_accuracy.csv', delimiter=','), indices_or_sections=3, axis=-1)
+epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths[1]+'/csv/epoch_loss.csv', delimiter=','), indices_or_sections=3, axis=-1)
 
 # Sadly, in the csv produced the top row is not commented out, resulting in nans
 # We dont need to worry, though, because matplotlib ignores nans
@@ -132,7 +132,7 @@ epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths
 plt.subplots_adjust(wspace=0.5,hspace=1)
 
 ylim_acc = [0.75,1.02]
-ylim_loss = [-0.025,0.475]
+ylim_loss = [-0.025,0.65]
 
 plt.subplot(221)
 plt.title('Two Layers')
@@ -298,7 +298,7 @@ def plot_cumulative_distribution(type, dists, labels, binning, classcode, classn
     plt.ylim(1.5*1e-3,1)
     plt.yscale('log')
     plt.xlabel(classname + ' output node')
-    plt.ylabel('ECDF (normed)')
+    plt.ylabel('EDF (normed)')
     plt.legend(loc='upper center')
     plt.tight_layout()
 
@@ -366,6 +366,7 @@ def lin(x,a,b):
     return a*x+b
 
 def plot_roc_curves(label, Y_pred, title='ROC Curves'):
+    classnames=['cats','dogs','wildlife']
     # Binarize the output
     Y_one_hot = label_binarize(label, classes=[0, 1, 2])
 
@@ -379,7 +380,7 @@ def plot_roc_curves(label, Y_pred, title='ROC Curves'):
         colors = cycle(['blue', 'red', 'green'])
     for i, color in zip(range(3), colors):
         plt.plot(fpr[i], tpr[i], color=color,
-                label='ROC class {0} (AUC = {1:0.3f})'
+                label= classnames[i]+' (AUC = {1:0.3f})'
                 ''.format(i, roc_auc[i]))
         plt.plot(x_plot, lin(x_plot, 1,0), 'k--')
         plt.xlim([0.001, 1.0])
@@ -420,6 +421,7 @@ neigh.fit(X_train, y_train)
 y_pred = neigh.predict(X_test)
 
 report_knn = classification_report(y_test, y_pred, output_dict=True)
+print('Report knn',classification_report(y_test, y_pred))
 report_2 = classification_report(label_2.astype(int), Y_cls_2, output_dict=True)
 print(label_2.shape)
 report_7 = classification_report(label_7.astype(int), Y_cls_7, output_dict=True)
@@ -432,6 +434,8 @@ label_dnn = resort_labels(label_dnn)
 Y_pred_dnn = np.vstack((cat_dnn, dog_dnn, wildlife_dnn)).T
 Y_cls_dnn = np.argmax(Y_pred_dnn, axis = 1)
 report_dnn = classification_report(label_dnn.astype(int), Y_cls_dnn, output_dict=True)
+
+print('DNN report', classification_report(label_dnn.astype(int), Y_cls_dnn))
 
 def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, report_2=report_2, report_7=report_7):
     # Transform name of class to label
