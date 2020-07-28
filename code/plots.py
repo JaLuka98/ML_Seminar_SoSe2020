@@ -13,43 +13,6 @@ from sklearn.metrics import confusion_matrix, classification_report
 import itertools
 import matplotlib.cm as cm
 
-
-# Acknowledgement to Olaf Nackenhorst Exercise 4 ML Seminar summer term 2020, TU Dortmund
-def plot_confusion_matrix(cm, classes,
-                          normalize=True,
-                          title='Confusion matrix',
-                          cmap=plt.cm.Blues,
-                          colorbar=True):
-    """
-    This function prints and plots the confusion matrix.
-    Normalization can be applied by setting `normalize=True`.
-    """
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    if colorbar: plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
-    # matplotlib 3.1.1 broke inverted axes with fixed ticks :(
-    # Maybe this is not necessary in other version. Check it at the end!
-    plt.ylim([2.5,-0.5])
-
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-
-    # Loop over data dimensions and create text annotations.
-    fmt = '.2f' if normalize else 'd'
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, format(cm[i, j], fmt),
-                 horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
-
-    #plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-
-
 #########################################
 ######### 1) Input Data Plots ###########
 #########################################
@@ -86,16 +49,25 @@ plt.figure(figsize=(14,5))
 plt.subplots_adjust(wspace=0.35,hspace=1)
 
 plt.subplot(131)
-plt.title('Trainingsdatensatz')
+plt.title('Trainingsdatensatz', fontsize=16)
 plt.bar(labels,y_train,color=['red','green','blue'],alpha=0.6)
+plt.ylabel('Anzahl Bilder', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 
 plt.subplot(132)
-plt.title('Validierungsdatensatz')
+plt.title('Validierungsdatensatz', fontsize=16)
 plt.bar(labels,y_val,color=['red','green','blue'],alpha=0.6)
+plt.ylabel('Anzahl Bilder', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 
 plt.subplot(133)
-plt.title('Testdatensatz')
+plt.title('Testdatensatz', fontsize=16)
 plt.bar(labels,y_test,color=['red','green','blue'],alpha=0.6)
+plt.ylabel('Anzahl Bilder', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 
 
 plt.savefig('plots/barplot_input.pdf')
@@ -137,44 +109,54 @@ ylim_acc = [0.75,1.02]
 ylim_loss = [-0.025,0.65]
 
 plt.subplot(221)
-plt.title('Two Layers')
+plt.title('Two Layers', fontsize=16)
 plt.plot(epoch_two, acc_train_two, label='train')
 plt.plot(epoch_two, acc_val_two, label='val')
-plt.legend(loc='best')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
+plt.legend(loc='best', fontsize=12)
+plt.xlabel('Epoch', fontsize=16)
+plt.ylabel('Accuracy', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 plt.ylim(ylim_acc)
 plt.grid()
 
 plt.subplot(222)
-plt.title('Seven Layers')
+plt.title('Seven Layers', fontsize=16)
 plt.plot(epoch_seven, acc_train_seven, label='train')
 plt.plot(epoch_seven, acc_val_seven, label='val')
-plt.legend(loc='best')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
+plt.legend(loc='best', fontsize=12)
+plt.xlabel('Epoch', fontsize=16)
+plt.ylabel('Accuracy', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 plt.ylim(ylim_acc)
 plt.grid()
 
 plt.subplot(223)
-plt.title('Two Layers')
+plt.title('Two Layers', fontsize=16)
 plt.plot(epoch_two, loss_train_two, label='train')
 plt.plot(epoch_two, loss_val_two, label='val')
-plt.legend(loc='best')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
+plt.legend(loc='best', fontsize=12)
+plt.xlabel('Epoch', fontsize=16)
+plt.ylabel('Loss', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 plt.ylim(ylim_loss)
 plt.grid()
 
 plt.subplot(224)
-plt.title('Seven Layers')
+plt.title('Seven Layers', fontsize=16)
 plt.plot(epoch_seven, loss_train_seven, label='train')
 plt.plot(epoch_seven, loss_val_seven, label='val')
-plt.legend(loc='best')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
+plt.legend(loc='best', fontsize=12)
+plt.xlabel('Epoch', fontsize=16)
+plt.ylabel('Loss', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
 plt.ylim(ylim_loss)
 plt.grid()
+
+#plt.tight_layout()
 
 #plt.tight_layout() # Ist das besser oder schlechter so?
 plt.savefig('plots/acc_and_loss.pdf')
@@ -194,80 +176,61 @@ import seaborn as sns
 ## dog = 2
 
 def plotoutput(predictionpath,printname):
-
+    # Hier die legend nicht mit fontsize=12 weil es sonst einfach nicht gut passt :(
     i, label, cat, wildlife, dog = np.genfromtxt(predictionpath+'_train.txt',unpack=True)
     i_test, label_test, cat_test, wildlife_test, dog_test = np.genfromtxt(predictionpath+'_test.txt',unpack=True)
 
     plt.figure(figsize=(15,5))
     plt.subplots_adjust(wspace=0.25,hspace=0.3)
 
-
     plt.subplot(131)
-    plt.title("Cat output node")
+    plt.title("Cat output node", fontsize=16)
     plt.hist(cat[label==0],label="Cat images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
     plt.hist(cat[label!=0],label="Non Cat images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
-    #plt.hist(cat[label==2],label="Dog images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
-    #plt.hist(cat[label==1],label="Wildlife images train",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
 
     counts_cat,bin_edges = np.histogram(cat_test[label_test==0],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     counts_other,bin_edges = np.histogram(cat_test[label_test!=0],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
-    #counts_dog,bin_edges = np.histogram(cat_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-    #counts_wild,bin_edges = np.histogram(cat_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
 
     bin_centres = (bin_edges[:-1] + bin_edges[1:])/2.
 
     plt.plot(bin_centres,counts_cat,'ro',alpha=0.8, label="Cat images test")
     plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Cat images test")
-    #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
-    #plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.legend()
     plt.yscale('log')
     plt.grid()
-
-
 
 
     plt.subplot(132)
-    plt.title("Dog output node")
+    plt.title("Dog output node", fontsize=16)
     plt.hist(dog[label==2],label="Dog images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
     plt.hist(dog[label!=2],label="Non dog images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
-    #plt.hist(dog[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="blue",density=True)
-    #plt.hist(dog[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
 
     counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     counts_other,bin_edges = np.histogram(dog_test[label_test!=2],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
-    #counts_dog,bin_edges = np.histogram(dog_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-    #counts_wild,bin_edges = np.histogram(dog_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-
 
     plt.plot(bin_centres,counts_dog,'ro',alpha=0.8, label="Dog images test")
     plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Dog images test")
-    #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
-    #plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.legend()
     plt.yscale('log')
     plt.grid()
 
 
-
-
-
     plt.subplot(133)
-    plt.title("Wildlife output node")
+    plt.title("Wildlife output node", fontsize=16)
     plt.hist(wildlife[label==1],label="Wildlife images train",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="red",density=True)
     plt.hist(wildlife[label!=1],label="Non Wildlife images test",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=1,color="blue",density=True)
-    #plt.hist(wildlife[label==2],label="Dog images",histtype="step",bins=[0,0.1,0.3,0.5,0.7,0.9,1],alpha=0.5,color="blue",density=True)
-    #plt.hist(wildlife[label==1],label="Wildlife images",histtype="step",bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],alpha=0.5,color="green",density=True)
 
     counts_wildlife,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
     counts_other,bin_edges = np.histogram(wildlife_test[label_test!=1],bins=[0,0.1,0.3,0.5,0.7,0.9,1],density=True)
-    #counts_dog,bin_edges = np.histogram(wildlife_test[label_test==2],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
-    #counts_wild,bin_edges = np.histogram(wildlife_test[label_test==1],bins=[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],density=True)
 
     plt.plot(bin_centres,counts_wildlife,'ro',alpha=0.8, label="Wildlife images test")
     plt.plot(bin_centres,counts_other,'bo',alpha=0.8, label="Non Wildlife images test")
-    #plt.plot(bin_centres,counts_dog,'bo',alpha=0.8, label="Dog images test")
-    #plt.plot(bin_centres,counts_wild,'go',alpha=0.8, label="Wildlife images Test")
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.legend()
     plt.yscale('log')
     plt.grid()
@@ -323,13 +286,15 @@ def plot_cumulative_distribution(type, dists, labels, binning, classcode, classn
              cumulative=True, label=type+' Layers', color=c, linestyle='-')
     plt.hist(test[label_test==classcode], bins=binning, density=True, histtype='step',
              cumulative=True, color=c, linestyle='--')
-    plt.title('True ' + classname + 's')
+    plt.title('True ' + classname + 's', fontsize=14)
     plt.xlim([0,1])
     plt.ylim(1.5*1e-3,1)
     plt.yscale('log')
-    plt.xlabel(classname + ' output node')
-    plt.ylabel('EDF (normed)')
-    plt.legend(loc='upper center')
+    plt.xlabel(classname + ' output node', fontsize=14)
+    plt.ylabel('EDF (normed)', fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.legend(loc='upper center', fontsize=10)
     plt.tight_layout()
 
 binning = np.linspace(0,1,100)
@@ -359,6 +324,45 @@ plt.clf()
 ########### 5) Performance Plot #########
 #########################################
 
+
+# Acknowledgement to Olaf Nackenhorst Exercise 4 ML Seminar summer term 2020, TU Dortmund
+def plot_confusion_matrix(cm, classes,
+                          normalize=True,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues,
+                          colorbar=True):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title, fontsize=12)
+    if colorbar: plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+    # matplotlib 3.1.1 broke inverted axes with fixed ticks :(
+    # Maybe this is not necessary in other version. Check it at the end!
+    plt.ylim([2.5,-0.5])
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    # Loop over data dimensions and create text annotations.
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black", fontsize=12)
+
+    #plt.tight_layout()
+    plt.ylabel('True label', fontsize=12)
+    plt.xlabel('Predicted label', fontsize=12)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+
+
 Y_pred_2 = np.vstack((cat_2, dog_2, wildlife_2)).T # Now it is in the common convention (1500,3)
 # Number of examples, number of classes
 Y_cls_2 = np.argmax(Y_pred_2, axis = 1)
@@ -371,7 +375,7 @@ Y_cls_7 = np.argmax(Y_pred_7, axis = 1)
 conf_mat_7 = confusion_matrix(label_7, Y_cls_7)
 
 # plot the confusion matrices side by side
-plt.subplots_adjust(wspace=0.5,hspace=0.5)
+plt.subplots_adjust(wspace=0,hspace=0.5)
 plt.subplot(121)
 plot_confusion_matrix(conf_mat_2, classes = ['cat', 'dog', 'wildlife'], normalize=False, title='Two Layers', colorbar=False)
 plt.subplot(122)
@@ -415,16 +419,18 @@ def plot_roc_curves(label, Y_pred, title='ROC Curves'):
         plt.plot(x_plot, lin(x_plot, 1,0), 'k--')
         plt.xlim([0.001, 1.0])
         plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
+        plt.xlabel('False Positive Rate', fontsize=16)
+        plt.ylabel('True Positive Rate', fontsize=16)
+        plt.xticks(fontsize=14)
+        plt.yticks(fontsize=14)
         plt.xscale('log')
-        plt.title(title)
+        plt.title(title, fontsize=16)
         plt.tight_layout()
-        plt.legend(loc="best")
+        plt.legend(loc="right")
         plt.grid()
 
 
-#plt.subplots_adjust(wspace=0.5,hspace=0.5)
+plt.subplots_adjust(wspace=0.5,hspace=1)
 plt.figure(figsize=(9,4.5))
 plt.subplot(121)
 plot_roc_curves(label_2, Y_pred_2, title='Two Layers')
@@ -502,11 +508,14 @@ def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, r
     plt.xticks([r + barWidth for r in range(len(bars1))], [ 'kNN', 'DNN', 'Two\nLayers', 'Seven\nLayers'])
     plt.xlim([-0.25,3.75])
     plt.ylim([0.0,1.35])
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     plt.hlines(1,-4,4, linestyles='dashed')
     if legend==True: plt.legend()
     plt.tight_layout()
 
 plt.figure(figsize=(9,3))
+#plt.subplots_adjust(wspace=0.5,hspace=1)
 plt.subplot(131)
 plot_bars(classname='cats', legend=False)
 plt.subplot(132)
