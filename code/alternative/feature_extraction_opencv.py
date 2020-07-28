@@ -83,7 +83,7 @@ def gs_color_hists(path_get, path_store, path_labels):
 # Set this variable if you want to extract the color histograms from the pictures...
 # ...and store them and the pca transformed data on disk.
 # You can set store = False, then the data wont be saved to disk.
-store = True
+store = False
 
 if store:
 	gs_color_hists(path_get="../afhq/train", path_store="./color_hists_train", path_labels="./labels_train")
@@ -118,14 +118,24 @@ print('Classification Report:\n', classification_report(y_val, y_pred))
 sns.distplot(X[:,0][y==0], hist=False, label='cat')
 sns.distplot(X[:,0][y==1], hist=False, label='dog')
 sns.distplot(X[:,0][y==2], hist=False, label='wild')
-plt.xlabel('First principal component')
-plt.ylabel('KDE')
+plt.xlabel('First principal component', fontsize=16)
+plt.ylabel('Kernel density estimation of PDF', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.legend(fontsize=12)
+plt.grid()
+plt.tight_layout()
 plt.savefig('kde_sns.pdf')
 plt.clf()
 
 sns.distplot(X[:,1][y==0], hist=False, label='cat')
 sns.distplot(X[:,1][y==1], hist=False, label='dog')
 sns.distplot(X[:,1][y==2], hist=False, label='wild')
-plt.xlabel('Second principal component')
-plt.ylabel('KDE')
+plt.xlabel('Second principal component', fontsize=16)
+plt.ylabel('Kernel density estimation of PDF', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.legend(fontsize=12)
+plt.grid()
+plt.tight_layout()
 plt.savefig('kde_sns_2.pdf')
