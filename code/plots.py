@@ -103,7 +103,7 @@ epoch_seven, loss_train_seven, loss_val_seven = np.split(ary=np.genfromtxt(paths
 # We dont need to worry, though, because matplotlib ignores nans
 
 
-plt.subplots_adjust(wspace=0.5,hspace=1)
+plt.subplots_adjust(wspace=0.3,hspace=0.5)
 
 ylim_acc = [0.75,1.02]
 ylim_loss = [-0.025,0.65]
@@ -472,6 +472,11 @@ Y_cls_dnn = np.argmax(Y_pred_dnn, axis = 1)
 report_dnn = classification_report(label_dnn.astype(int), Y_cls_dnn, output_dict=True)
 
 print('DNN report', classification_report(label_dnn.astype(int), Y_cls_dnn))
+
+print("==========================")
+print(report_2)
+print(report_7)
+print("==========================")
 
 def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, report_2=report_2, report_7=report_7):
     # Transform name of class to label
