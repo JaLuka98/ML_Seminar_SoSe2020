@@ -474,8 +474,8 @@ report_dnn = classification_report(label_dnn.astype(int), Y_cls_dnn, output_dict
 print('DNN report', classification_report(label_dnn.astype(int), Y_cls_dnn))
 
 print("==========================")
-print(report_2)
-print(report_7)
+print('Report 2 layer', classification_report(label_2.astype(int), Y_cls_2))
+print('Report 7 layer', classification_report(label_7.astype(int), Y_cls_7))
 print("==========================")
 
 def plot_bars(classname, legend, report_dnn=report_dnn, report_knn=report_knn, report_2=report_2, report_7=report_7):
