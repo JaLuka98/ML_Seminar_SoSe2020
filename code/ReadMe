@@ -1,0 +1,30 @@
+Ordner afhq:
+Enthält den Datensatz in test und val aufgeteilt, val ist der ordner für die test Daten
+
+Ornder alternative:
+enthält den code der Alternativmethode knn
+
+env:
+Enthält yml files für anaconda um passende Umgebungen zum ausführen der skripte bereitzustellen
+
+
+Dateien:
+
+- generator.py:
+Enhält eine Klasse als Data Generator für das Training.
+Lädt die Bilder von den Pfaden als Batches mit einer variablen Batch size
+
+- loader.py:
+Enthält eine Methode zum Laden aller Pfade der Bilder und erstellt entsprechende Hot-Vektoren als label
+
+logs_and_models
+predictions
+
+- predict.py:
+Script zum erstellen von Predictions von Test Daten anhand vorher gespeicherter Modelle
+
+- test.py:
+Ausführen einer Testsequence
+
+- testsequence.py:
+Klasse zum planen von Testläufen mit vielen verschiedenen Modellen zur Hyperparametheroptimierung
