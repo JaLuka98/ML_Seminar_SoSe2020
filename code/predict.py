@@ -3,6 +3,7 @@ from tensorflow import keras
 from loader import load_data
 from generator import Generator
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def makepredictions(modelpath,outputfile,training_dir):
@@ -24,18 +25,29 @@ def makepredictions(modelpath,outputfile,training_dir):
     reconstructed_model.summary()
 
     prediction = reconstructed_model.predict_generator(test_generator)
+
+    ## drei größten fehler von dogs in wildlife
+    label = np.argmax(y_test,axis=1)
+    wildlife = prediction[:,1]
+    wilddogs = wildlife[label==2]
+    dogfiles = X_test_filenames[label==2]
+    indices = wilddogs.argsort()[-3:][::-1]
+    print(indices)
+    print(wilddogs[indices])
+    print(dogfiles[indices])
     
+
     #print(X_test_filenames)
     #print(y_test)
     #print(prediction)
     
-    np.savetxt(outputfile,np.vstack((np.arange(len(y_test)),np.argmax(y_test,axis=1),np.array(prediction[:,0]),np.array(prediction[:,1]),np.array(prediction[:,2]))).T)
+#    np.savetxt(outputfile,np.vstack((np.arange(len(y_test)),np.argmax(y_test,axis=1),np.array(prediction[:,0]),np.array(prediction[:,1]),np.array(prediction[:,2]))).T)
 
-makepredictions("logs_and_models/ergebnisse/model1","predictions/7layer_predictions_test.txt","afhq/val")
-makepredictions("logs_and_models/ergebnisse/model1","predictions/7layer_predictions_train.txt","afhq/train")
-makepredictions("logs_and_models/ergebnisse/model2","predictions/2layer_predictions_test.txt","afhq/val")
-makepredictions("logs_and_models/ergebnisse/model2","predictions/2layer_predictions_train.txt","afhq/train")
-makepredictions("logs_and_models/ergebnisse/model3","predictions/dnn_predictions_train.txt","afhq/train")
-makepredictions("logs_and_models/ergebnisse/model3","predictions/dnn_predictions_test.txt","afhq/val")
+makepredictions("logs_and_models/model1","predictions/7layer_predictions_test.txt","afhq/val")
+#makepredictions("logs_and_models/ergebnisse/model1","predictions/7layer_predictions_train.txt","afhq/train")
+#makepredictions("logs_and_models/ergebnisse/model2","predictions/2layer_predictions_test.txt","afhq/val")
+#makepredictions("logs_and_models/ergebnisse/model2","predictions/2layer_predictions_train.txt","afhq/train")
+#makepredictions("logs_and_models/ergebnisse/model3","predictions/dnn_predictions_train.txt","afhq/train")
+#makepredictions("logs_and_models/ergebnisse/model3","predictions/dnn_predictions_test.txt","afhq/val")
 
 

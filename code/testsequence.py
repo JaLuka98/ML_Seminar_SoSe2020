@@ -25,14 +25,21 @@ import time
 
 import os
 
+
+# Klasse um viele Modelle am stück zu trainieren, geeignet für Hyperparameteroptimierung
 class Testsequence:
 
+    # models Liste aller Modelle die trainiert werden sollen
     def __init__(self, testname, epochs):
         self.models = []
         self.text_file = open("test_" + testname + ".log", "w")
         self.text_file.write('Log file for test ' + testname + '\n')
         self.epochs = epochs
 
+    #Hinzufügen eines DNNs zur Liste aller Modelle:;
+    # numdense: Anzahl dense layer (int)
+    # units: Anzahl unit pro dense layer (array int)
+    # pooling: Größe des Pooling Layers (int)
     def add_dnn(self, numdense, units,pooling):
         
         model = Sequential()
@@ -44,6 +51,8 @@ class Testsequence:
         model.add(Dense(3, activation='softmax'))
 
         self.models.append(model)
+
+    # Fügt ein CNN zur Liste der Modelle hinzu. 
     # numconvlayer: Anzahl convolutional layer (int)
     # numfilters: Anzahl filter pro conv layer (array int)
     # numdense: Anzahl dense layer (int)
@@ -82,9 +91,11 @@ class Testsequence:
 
         self.models.append(model)
 
+    # Gibt die Summary eines Modells aus der Liste aus
     def summary(self, model):
         self.models[model].summary()
 
+    # Startet Session neu um Speicherplatz bereitzustellen, sonst kann OOM bei zu vielen Modellen am Stück auftreten
     def reset_keras(self):
             sess = get_session()
             clear_session()
@@ -104,10 +115,14 @@ class Testsequence:
             config.gpu_options.allow_growth = True
             set_session(InteractiveSession(config=config))
 
+    # Kompiliert alle Modelle
     def compileall(self):
         for model in self.models:
             model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
+    # Trainiert alle Modelle.
+    # Logs werden mit TensorBoard erstellt.
+    # Mit safe = True können Modelle gespeichert werden.
     def trainall(self, traingenerator, valgenerator, safe):
         i = 0
         for model in self.models:
@@ -129,14 +144,15 @@ class Testsequence:
 
             self.text_file.write('time for training: ' + str(end-start) + '\n')
 
-
             self.text_file.write("==============================\n")
             self.text_file.write("==============================\n")
             self.text_file.write("==============================\n")
 
-            np.savetxt(str(i)+"history_loss.txt",np.vstack((np.array(history.history['accuracy']),np.array(history.history['val_accuracy']),history.history['loss'],history.history['val_loss'])).T)
+            # Speichert Loss und accuracy separat von TensorBoard
+            # np.savetxt(str(i)+"history_loss.txt",np.vstack((np.array(history.history['accuracy']),np.array(history.history['val_accuracy']),history.history['loss'],history.history['val_loss'])).T)
 
             i+=1
             self.reset_keras()
 
-        self.text_file.close()
+        # Individueller Log File kann gespeichert werden
+        #self.text_file.close()
